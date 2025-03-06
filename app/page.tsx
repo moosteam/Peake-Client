@@ -70,22 +70,6 @@ export default function Home() {
                     className="border border-blue-200 bg-white rounded-lg p-3 pl-10 pr-24 w-full text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-200 placeholder:text-[#9CA0A9]"
                   />
                 </div>
-                
-                <div className="flex space-x-2">
-                  {['1시간', '6시간', '1일', '1주일', '1달'].map((duration) => (
-                    <button
-                      key={duration}
-                      onClick={() => setSelectedDuration(duration)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition duration-150 ease-in-out transform ${
-                        selectedDuration === duration
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-blue-200 text-gray-700'
-                      }`}
-                    >
-                      {duration}
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
