@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Header from './header/header';
+import Header from './sidebar/sidebar';
 
 export default function Home() {
   return (
