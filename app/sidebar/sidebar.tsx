@@ -46,7 +46,7 @@ export default function Sidebar() {
         })}
       </nav>
       
-      <div className="absolute bottom-4 left-4 flex items-center p-3 rounded-lg">
+      <div className="absolute bottom-4 left-4 flex items-center p-3  rounded-lg">
         <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-3">
           s
         </div>
