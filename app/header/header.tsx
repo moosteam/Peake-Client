@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
-  const navLinkStyle = "text-gray-600 hover:text-gray-700 px-3 text-[14px] font-medium";
+  const navLinkStyle = "text-black hover:text-gray-700 px-3 text-[14px] font-medium ";
   
   return (
     <header className="w-full border-b border-gray-200 bg-[#F3F4F6] pt-3">
@@ -31,10 +31,10 @@ export default function Header() {
               href="/signup" 
               className="text-gray-600 hover:text-gray-500 px-3 py-2 text-sm font-semibold"
             >
-              Sign up
+              회원가입
             </Link>
-            <button className="bg-black text-white w-[90px] h-[44px] rounded-[30px] text-[13px] ml-[-14] font-semibold hover:bg-gray-500">
-              Log in
+            <button className="bg-black text-white w-[90px] h-[44px] rounded-[30px] text-[14px] ml-[-14] font-semibold hover:bg-gray-500">
+              로그인
             </button>
           </div>
         </div>
