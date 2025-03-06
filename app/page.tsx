@@ -32,9 +32,9 @@ export default function Home() {
                 <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-2">
                   <span className="text-white font-bold text-sm">i</span>
                 </div>
-                <span className="text-blue-900 font-bold text-lg">구매하실 유튜버 채널명을 입력하세요.</span>
+                <span className="text-blue-900 font-bold text-lg mt-2">구매하실 유튜버 채널명을 입력하세요.</span>
               </div>
-              <p className="text-sm text-gray-600 ml-8">
+              <p className="text-sm text-blue-700 ml-8 mt-[-3]">
                 구독자 150만 이상 한국인 유튜버만 시장에 존재합니다. 
               </p>
               <div className="mt-4 flex justify-between items-center">
