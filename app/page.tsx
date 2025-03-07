@@ -80,7 +80,7 @@ export default function Home() {
                     <div>
                       <p className="text-gray-700 font-medium">남은 모의투자금</p>
                       <div className="flex justify-between items-center">
-                        <p className="text-[28px] font-bold text-blue-500 flex items-center gap-2">
+                        <p className="text-[28px] font-bold text-gray-800 flex items-center gap-3">
                           <svg 
                             width="32" 
                             height="32" 
