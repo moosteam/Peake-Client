@@ -21,26 +21,23 @@ export default function Home() {
             <table className="w-full border-collapse table-fixed">
               <thead>
                 <tr className="border-b">
-                  <th className={`${tableHeaderStyle} text-left w-1/7`}>
+                  <th className={`${tableHeaderStyle} text-left w-1/6`}>
                     유튜버
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
+                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     구독자 수
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
-                    등략율
+                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
+                    등략률
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
+                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     카테고리
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
+                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     거래량
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
+                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     안전율
-                  </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
-                    생성일
                   </th>
                 </tr>
               </thead>
@@ -63,9 +60,8 @@ export default function Home() {
                   <td className={`${tableCellStyle} text-right`}>바이오</td>
                   <td className={`${tableCellStyle} text-right`}>2,500,000주</td>
                   <td className="px-3 py-2 text-sm text-right">
-                    <span className="text-red-500">0.5%</span>
+                    <span className="text-blue-500">0.5%</span>
                   </td>
-                  <td className="px-3 py-2 text-sm text-red-500 text-right">23-10-15</td>
                 </tr>
                 <tr className="hover:bg-gray-50">
                   <td className={`${tableCellStyle}`}>
@@ -77,17 +73,16 @@ export default function Home() {
                   </td>
                   <td className={`${tableCellStyle} text-right`}>70,000명</td>
                   <td className="px-3 py-2 text-sm text-right">
-                    <div className="text-green-500">
-                      +1.5%
-                      <div className="text-xs">+1,000원</div>
+                    <div className="text-blue-500">
+                      -1.5%
+                      <div className="text-xs">-1,000원</div>
                     </div>
                   </td>
                   <td className={`${tableCellStyle} text-right`}>반도체</td>
                   <td className={`${tableCellStyle} text-right`}>1,000,000주</td>
                   <td className="px-3 py-2 text-sm text-right">
-                    <span className="text-green-500">0.5%</span>
+                    <span className="text-blue-500">0.5%</span>
                   </td>
-                  <td className="px-3 py-2 text-sm text-green-500 text-right">24-05-22</td>
                 </tr>
                 <tr className="hover:bg-gray-50">
                   <td className={`${tableCellStyle}`}>
@@ -107,9 +102,8 @@ export default function Home() {
                   <td className={`${tableCellStyle} text-right`}>전자기기</td>
                   <td className={`${tableCellStyle} text-right`}>500,000주</td>
                   <td className="px-3 py-2 text-sm text-right">
-                    <span className="text-red-500">0.5%</span>
+                    <span className="text-blue-500">0.5%</span>
                   </td>
-                  <td className="px-3 py-2 text-sm text-red-500 text-right">25-10-20</td>
                 </tr>
               </tbody>
             </table>
