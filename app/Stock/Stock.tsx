@@ -121,7 +121,7 @@ export default function Stock() {
         <tbody>
           {subscribers.map((subscriber, index) => (
             <tr
-              className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white' : 'bg-[#F9FAFB]'}`}
+              className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white rounded-lg' : 'bg-[#F9FAFB] rounded-[8px]'}`}
               key={index}
             >
               <td className={`${tableCellStyle}`}>
