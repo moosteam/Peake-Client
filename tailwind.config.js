@@ -63,7 +63,7 @@ module.exports = {
         white: "#FFFFFF",
       },
       fontFamily: {
-        pretendard: ["Pretendard", "sans-serif"],
+        sans: ['Pretendard', 'sans-serif'],
       },
       keyframes: {
         marker: {

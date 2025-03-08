@@ -3,6 +3,9 @@ import { useState } from 'react';
 import Sidebar from './sidebar/sidebar';
 import SearchBar from './searchbar/searchbar';
 
+const tableHeaderStyle = "px-3 py-2 text-sm font-medium text-gray-500";
+const tableCellStyle = "px-3 py-2 text-sm text-gray-900";
+
 export default function Home() {
   const [searchTime, setSearchTime] = useState('');
 
@@ -18,95 +21,95 @@ export default function Home() {
             <table className="w-full border-collapse table-fixed">
               <thead>
                 <tr className="border-b">
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-left w-1/7`}>
                     유튜버
                   </th>
-                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
                     구독자 수
                   </th>
-                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
                     등략율
                   </th>
-                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
                     카테고리
                   </th>
-                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
                     거래량
                   </th>
-                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
                     안전율
                   </th>
-                  <th className="px-4 py-3 text-center text-sm font-medium text-gray-500 w-1/7">
+                  <th className={`${tableHeaderStyle} text-right w-1/7`}>
                     생성일
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm text-gray-900">
+                  <td className={`${tableCellStyle}`}>
                     <div className="flex items-center">
-                      <span className="mr-2 text-gray-500">1</span>
+                      <span className="mr-2 text-gray-500 text-sm">1</span>
                       <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
-                      <span>사일렉스 홀딩스</span>
+                      <span className="text-sm">사일렉스 홀딩스</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">500원</td>
-                  <td className="px-4 py-3 text-sm text-center">
+                  <td className={`${tableCellStyle} text-right`}>500명</td>
+                  <td className="px-3 py-2 text-sm text-right">
                     <div className="text-red-500">
                       +8.0%
                       <div className="text-xs">+40원</div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">바이오</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">2,500,000주</td>
-                  <td className="px-4 py-3 text-sm text-center">
-                    <span className="text-red-500">매도</span>
+                  <td className={`${tableCellStyle} text-right`}>바이오</td>
+                  <td className={`${tableCellStyle} text-right`}>2,500,000주</td>
+                  <td className="px-3 py-2 text-sm text-right">
+                    <span className="text-red-500">0.5%</span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-red-500 text-center">+45.0%</td>
+                  <td className="px-3 py-2 text-sm text-red-500 text-right">23-10-15</td>
                 </tr>
                 <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm text-gray-900">
+                  <td className={`${tableCellStyle}`}>
                     <div className="flex items-center">
-                      <span className="mr-2 text-gray-500">2</span>
+                      <span className="mr-2 text-gray-500 text-sm">2</span>
                       <img src="/image.jpg" alt="KR" className="w-8 h-8 mr-2 rounded-full" />
-                      <span>삼성전자</span>
+                      <span className="text-sm">삼성전자</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">70,000원</td>
-                  <td className="px-4 py-3 text-sm text-center">
+                  <td className={`${tableCellStyle} text-right`}>70,000명</td>
+                  <td className="px-3 py-2 text-sm text-right">
                     <div className="text-green-500">
                       +1.5%
                       <div className="text-xs">+1,000원</div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">반도체</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">1,000,000주</td>
-                  <td className="px-4 py-3 text-sm text-center">
-                    <span className="text-green-500">매수</span>
+                  <td className={`${tableCellStyle} text-right`}>반도체</td>
+                  <td className={`${tableCellStyle} text-right`}>1,000,000주</td>
+                  <td className="px-3 py-2 text-sm text-right">
+                    <span className="text-green-500">0.5%</span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-green-500 text-center">+1.5%</td>
+                  <td className="px-3 py-2 text-sm text-green-500 text-right">24-05-22</td>
                 </tr>
                 <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm text-gray-900">
+                  <td className={`${tableCellStyle}`}>
                     <div className="flex items-center">
-                      <span className="mr-2 text-gray-500">3</span>
+                      <span className="mr-2 text-gray-500 text-sm">3</span>
                       <img src="/image.jpg" alt="JP" className="w-8 h-8 mr-2 rounded-full" />
-                      <span>소니</span>
+                      <span className="text-sm">소니</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">10,000엔</td>
-                  <td className="px-4 py-3 text-sm text-center">
+                  <td className={`${tableCellStyle} text-right`}>10,000명</td>
+                  <td className="px-3 py-2 text-sm text-right">
                     <div className="text-red-500">
                       -0.5%
                       <div className="text-xs">-50엔</div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">전자기기</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 text-center">500,000주</td>
-                  <td className="px-4 py-3 text-sm text-center">
-                    <span className="text-red-500">관망</span>
+                  <td className={`${tableCellStyle} text-right`}>전자기기</td>
+                  <td className={`${tableCellStyle} text-right`}>500,000주</td>
+                  <td className="px-3 py-2 text-sm text-right">
+                    <span className="text-red-500">0.5%</span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-red-500 text-center">-0.5%</td>
+                  <td className="px-3 py-2 text-sm text-red-500 text-right">25-10-20</td>
                 </tr>
               </tbody>
             </table>
