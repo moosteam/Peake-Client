@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Sidebar from './sidebar/sidebar';
 import SearchBar from './searchbar/searchbar';
-import Stock from './Stock/Stock'; // Stock 컴포넌트 임포트
+import Stock from './Stock/Stock'; 
 
 export default function Home() {
   const [searchTime, setSearchTime] = useState('');
