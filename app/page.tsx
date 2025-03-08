@@ -2,12 +2,41 @@
 import { useState } from 'react';
 import Sidebar from './sidebar/sidebar';
 import SearchBar from './searchbar/searchbar';
+import { FaSort } from 'react-icons/fa';
 
 const tableHeaderStyle = "px-3 py-2 text-sm font-medium text-gray-500";
 const tableCellStyle = "px-3 py-2 text-sm text-gray-900";
 
 export default function Home() {
   const [searchTime, setSearchTime] = useState('');
+  const [sortField, setSortField] = useState('subscribers');
+  const [subscribers, setSubscribers] = useState([
+    { name: '더블비', count: 500, category: '개그', volume: '2,500,000주', rate: '+8.0%' },
+    { name: '뿌꾸', count: 70000, category: '게임', volume: '1,000,000주', rate: '-1.5%' },
+    { name: '미미미누', count: 10000, category: '학습/공부', volume: '500,000주', rate: '+0.5%' },
+  ]);
+  const [sortOrderSubscribers, setSortOrderSubscribers] = useState('asc');
+  const [sortOrderVolume, setSortOrderVolume] = useState('asc');
+
+  function handleSortSubscribers() {
+    setSortField('subscribers');
+    const sortedSubscribers = [...subscribers].sort((a, b) => {
+      return sortOrderSubscribers === 'asc' ? a.count - b.count : b.count - a.count;
+    }); 
+    setSubscribers(sortedSubscribers);
+    setSortOrderSubscribers(sortOrderSubscribers === 'asc' ? 'desc' : 'asc');
+    setSortOrderVolume('asc');
+  }
+
+  function handleSortVolume() {
+    setSortField('volume');
+    const sortedSubscribers = [...subscribers].sort((a, b) => {
+      return sortOrderVolume === 'asc' ? parseInt(a.volume.replace(/,/g, '').replace('주', '')) - parseInt(b.volume.replace(/,/g, '').replace('주', '')) : parseInt(b.volume.replace(/,/g, '').replace('주', '')) - parseInt(a.volume.replace(/,/g, '').replace('주', ''));
+    });
+    setSubscribers(sortedSubscribers);
+    setSortOrderVolume(sortOrderVolume === 'asc' ? 'desc' : 'asc');
+    setSortOrderSubscribers('asc');
+  }
 
   return (
     <div className="flex min-h-screen bg-[#F3F4F6]">
@@ -24,8 +53,11 @@ export default function Home() {
                   <th className={`${tableHeaderStyle} text-left w-1/6`}>
                     유튜버
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
+                  <th className={`${tableHeaderStyle} text-right w-1/8`} onClick={handleSortSubscribers}>
                     구독자 수
+                    <button className="ml-2">
+                      {sortOrderSubscribers === 'asc' ? '▲' : sortOrderSubscribers === 'desc' ? '▼' : <FaSort />}
+                    </button>
                   </th>
                   <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     등략률
@@ -33,8 +65,11 @@ export default function Home() {
                   <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     카테고리
                   </th>
-                  <th className={`${tableHeaderStyle} text-right w-1/6`}>
+                  <th className={`${tableHeaderStyle} text-right w-1/6`} onClick={handleSortVolume}>
                     거래량
+                    <button className="ml-2">
+                      {sortOrderVolume === 'asc' ? '▲' : sortOrderVolume === 'desc' ? '▼' : <FaSort />}
+                    </button>
                   </th>
                   <th className={`${tableHeaderStyle} text-right w-1/6`}>
                     안전율
@@ -42,69 +77,28 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="hover:bg-gray-50">
-                  <td className={`${tableCellStyle}`}>
-                    <div className="flex items-center">
-                      <span className="mr-2 text-gray-500 text-sm">1</span>
-                      <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
-                      <span className="text-sm">사일렉스 홀딩스</span>
-                    </div>
-                  </td>
-                  <td className={`${tableCellStyle} text-right`}>500명</td>
-                  <td className="px-3 py-2 text-sm text-right">
-                    <div className="text-red-500">
-                      +8.0%
-                      <div className="text-xs">+40원</div>
-                    </div>
-                  </td>
-                  <td className={`${tableCellStyle} text-right`}>바이오</td>
-                  <td className={`${tableCellStyle} text-right`}>2,500,000주</td>
-                  <td className="px-3 py-2 text-sm text-right">
-                    <span className="text-blue-500">0.5%</span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className={`${tableCellStyle}`}>
-                    <div className="flex items-center">
-                      <span className="mr-2 text-gray-500 text-sm">2</span>
-                      <img src="/image.jpg" alt="KR" className="w-8 h-8 mr-2 rounded-full" />
-                      <span className="text-sm">삼성전자</span>
-                    </div>
-                  </td>
-                  <td className={`${tableCellStyle} text-right`}>70,000명</td>
-                  <td className="px-3 py-2 text-sm text-right">
-                    <div className="text-blue-500">
-                      -1.5%
-                      <div className="text-xs">-1,000원</div>
-                    </div>
-                  </td>
-                  <td className={`${tableCellStyle} text-right`}>반도체</td>
-                  <td className={`${tableCellStyle} text-right`}>1,000,000주</td>
-                  <td className="px-3 py-2 text-sm text-right">
-                    <span className="text-blue-500">0.5%</span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className={`${tableCellStyle}`}>
-                    <div className="flex items-center">
-                      <span className="mr-2 text-gray-500 text-sm">3</span>
-                      <img src="/image.jpg" alt="JP" className="w-8 h-8 mr-2 rounded-full" />
-                      <span className="text-sm">소니</span>
-                    </div>
-                  </td>
-                  <td className={`${tableCellStyle} text-right`}>10,000명</td>
-                  <td className="px-3 py-2 text-sm text-right">
-                    <div className="text-red-500">
-                      -0.5%
-                      <div className="text-xs">-50엔</div>
-                    </div>
-                  </td>
-                  <td className={`${tableCellStyle} text-right`}>전자기기</td>
-                  <td className={`${tableCellStyle} text-right`}>500,000주</td>
-                  <td className="px-3 py-2 text-sm text-right">
-                    <span className="text-blue-500">0.5%</span>
-                  </td>
-                </tr>
+                {subscribers.map((subscriber, index) => (
+                  <tr className="hover:bg-gray-50" key={index}>
+                    <td className={`${tableCellStyle}`}>
+                      <div className="flex items-center">
+                        <span className="inline-block w-5 text-center mr-4 text-blue-500 text-sm">{index + 1}</span>
+                        <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
+                        <span className="text-sm">{subscriber.name}</span>
+                      </div>
+                    </td>
+                    <td className={`${tableCellStyle} text-right`}>{subscriber.count}명</td>
+                    <td className="px-3 py-2 text-sm text-right">
+                      <div className={subscriber.rate.includes('-') ? "text-red-500" : "text-blue-500"}>
+                        {subscriber.rate}
+                      </div>
+                    </td>
+                    <td className={`${tableCellStyle} text-right`}>{subscriber.category}</td>
+                    <td className={`${tableCellStyle} text-right`}>{subscriber.volume}</td>
+                    <td className="px-3 py-2 text-sm text-right">
+                      <span className="text-blue-500">0.5%</span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
