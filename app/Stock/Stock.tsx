@@ -9,6 +9,7 @@ const tableCellStyle = "px-3 py-2 text-sm text-gray-900";
 type Subscriber = {
   name: string;
   count: number;
+  price: number;
   category: string;
   volume: string;
   rate: string;
@@ -20,9 +21,9 @@ export default function Stock() {
   const [sortOrderSubscribers, setSortOrderSubscribers] = useState('desc');
   const [sortOrderVolume, setSortOrderVolume] = useState('asc');
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
-    { name: '더블비', count: 180, category: '개그', volume: '2,500,000주', rate: '+8.0%', liked: false },
-    { name: '뿌꾸', count: 160, category: '게임', volume: '1,000,000주', rate: '-1.5%', liked: false },
-    { name: '미미미누', count: 190, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
+    { name: '더블비', count: 180, price: 25000, category: '개그', volume: '2,500,000주', rate: '+8.0%', liked: false },
+    { name: '뿌꾸', count: 160, price: 18500, category: '게임', volume: '1,000,000주', rate: '-1.5%', liked: false },
+    { name: '미미미누', count: 190, price: 32000, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
   ]);
 
   
@@ -67,11 +68,11 @@ export default function Stock() {
       <table className="w-full border-collapse table-fixed rounded-lg overflow-hidden">
         <thead>
           <tr className="border-b">
-            <th className={`${tableHeaderStyle} text-left w-1/6 rounded-tl-lg text-gray-500`}>
+            <th className={`${tableHeaderStyle} text-left w-1/7 rounded-tl-lg text-gray-500`}>
               유튜버 · 설명
             </th>
             <th
-              className={`${tableHeaderStyle} text-right w-1/8 ${sortField === 'subscribers' ? 'text-blue-500' : 'text-gray-500'}`}
+              className={`${tableHeaderStyle} text-right w-1/9 ${sortField === 'subscribers' ? 'text-blue-500' : 'text-gray-500'}`}
               onClick={handleSortSubscribers}
             >
               구독자
@@ -96,10 +97,13 @@ export default function Stock() {
                 )}
               </button>
             </th>
-            <th className={`${tableHeaderStyle} text-right w-1/6 text-gray-500`}>등락률</th>
-            <th className={`${tableHeaderStyle} text-right w-1/6 text-gray-500`}>카테고리</th>
+            <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500 pl-6`}>
+              현재가
+            </th>
+            <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500`}>등락률</th>
+            <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500`}>카테고리</th>
             <th
-              className={`${tableHeaderStyle} text-right w-1/6 ${sortField === 'volume' ? 'text-blue-500' : 'text-gray-500'}`}
+              className={`${tableHeaderStyle} text-right w-1/9 ${sortField === 'volume' ? 'text-blue-500' : 'text-gray-500'}`}
               onClick={handleSortVolume}
             >
               거래량
@@ -124,7 +128,7 @@ export default function Stock() {
                 )}
               </button>
             </th>
-            <th className={`${tableHeaderStyle} text-right w-1/6 rounded-tr-lg text-gray-500`}>
+            <th className={`${tableHeaderStyle} text-right w-1/9 rounded-tr-lg text-gray-500`}>
               <div className="relative -left-14">안전율</div>
             </th>
           </tr>
@@ -161,6 +165,7 @@ export default function Stock() {
                 </div>
               </td>
               <td className={`${tableCellStyle} text-right`}>{subscriber.count}만명</td>
+              <td className={`${tableCellStyle} text-right pl-6`}>{subscriber.price.toLocaleString()}원</td>
               <td className="px-3 py-2 text-sm text-right">
                 <div className={subscriber.rate.includes('-') ? "text-red-500" : "text-blue-500"}>
                   {subscriber.rate}
