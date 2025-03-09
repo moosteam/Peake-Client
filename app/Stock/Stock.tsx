@@ -115,7 +115,9 @@ export default function Stock() {
                 )}
               </button>
             </th>
-            <th className={`${tableHeaderStyle} text-right w-1/6 rounded-tr-lg text-gray-500`}>안전율</th>
+            <th className={`${tableHeaderStyle} text-right w-1/6 rounded-tr-lg text-gray-500`}>
+              <div className="relative -left-14">안전율</div>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -142,7 +144,9 @@ export default function Stock() {
               <td className={`${tableCellStyle} text-right`}>{subscriber.category}</td>
               <td className={`${tableCellStyle} text-right`}>{subscriber.volume}</td>
               <td className="px-3 py-2 text-sm text-right">
-                <span className="text-blue-500">0.5%</span>
+                <div className="relative -left-14">
+                  <span className="text-blue-500">0.5%</span>
+                </div>
               </td>
             </tr>
           ))}
