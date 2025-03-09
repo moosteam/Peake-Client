@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import Image from 'next/image';
 
@@ -11,6 +12,7 @@ type Subscriber = {
   category: string;
   volume: string;
   rate: string;
+  liked: boolean;
 };
 
 export default function Stock() {
@@ -18,10 +20,16 @@ export default function Stock() {
   const [sortOrderSubscribers, setSortOrderSubscribers] = useState('desc');
   const [sortOrderVolume, setSortOrderVolume] = useState('asc');
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
-    { name: '더블비', count: 180, category: '개그', volume: '2,500,000주', rate: '+8.0%' },
-    { name: '뿌꾸', count: 160, category: '게임', volume: '1,000,000주', rate: '-1.5%' },
-    { name: '미미미누', count: 190, category: '학습/공부', volume: '500,000주', rate: '+0.5%' },
+    { name: '더블비', count: 180, category: '개그', volume: '2,500,000주', rate: '+8.0%', liked: false },
+    { name: '뿌꾸', count: 160, category: '게임', volume: '1,000,000주', rate: '-1.5%', liked: false },
+    { name: '미미미누', count: 190, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
   ]);
+
+  function toggleFavorite(index: number) {
+    const newSubscribers = [...subscribers];
+    newSubscribers[index] = { ...newSubscribers[index], liked: !newSubscribers[index].liked };
+    setSubscribers(newSubscribers);
+  }
 
   function handleSortSubscribers() {
     let newOrder = 'desc';
@@ -128,6 +136,20 @@ export default function Stock() {
             >
               <td className={`${tableCellStyle}`}>
                 <div className="flex items-center">
+                  <button onClick={() => toggleFavorite(index)} className="mr-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill={subscriber.liked ? "#ef4444" : "#d1d5db"}
+                      className="w-5 h-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
                   <span className="inline-block w-5 text-center mr-4 text-blue-500 text-sm">
                     {index + 1}
                   </span>
