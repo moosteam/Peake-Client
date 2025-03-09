@@ -69,7 +69,7 @@ export default function Stock() {
         <thead>
           <tr className="border-b">
             <th className={`${tableHeaderStyle} text-left w-1/7 rounded-tl-lg text-gray-500`}>
-              유튜버 · 설명
+              유튜버
             </th>
             <th
               className={`${tableHeaderStyle} text-right w-1/9 ${sortField === 'subscribers' ? 'text-blue-500' : 'text-gray-500'}`}
