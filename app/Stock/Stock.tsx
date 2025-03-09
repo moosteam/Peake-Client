@@ -14,13 +14,13 @@ type Subscriber = {
 };
 
 export default function Stock() {
-  const [sortField, setSortField] = useState('subscribers');
+  const [sortField, setSortField] = useState("");
   const [sortOrderSubscribers, setSortOrderSubscribers] = useState('desc');
   const [sortOrderVolume, setSortOrderVolume] = useState('asc');
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
     { name: '더블비', count: 180, category: '개그', volume: '2,500,000주', rate: '+8.0%' },
     { name: '뿌꾸', count: 160, category: '게임', volume: '1,000,000주', rate: '-1.5%' },
-    { name: '미미미누', count: 100, category: '학습/공부', volume: '500,000주', rate: '+0.5%' },
+    { name: '미미미누', count: 190, category: '학습/공부', volume: '500,000주', rate: '+0.5%' },
   ]);
 
   function handleSortSubscribers() {
