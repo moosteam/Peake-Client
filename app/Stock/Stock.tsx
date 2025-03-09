@@ -25,6 +25,7 @@ export default function Stock() {
     { name: '미미미누', count: 190, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
   ]);
 
+  
   function toggleFavorite(index: number) {
     const newSubscribers = [...subscribers];
     newSubscribers[index] = { ...newSubscribers[index], liked: !newSubscribers[index].liked };
@@ -134,7 +135,7 @@ export default function Stock() {
               className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white rounded-lg' : 'bg-[#F9FAFB] rounded-[8px]'}`}
               key={index}
             >
-              <td className={`${tableCellStyle}`}>
+              <td className={tableCellStyle}>
                 <div className="flex items-center">
                   <button onClick={() => toggleFavorite(index)} className="mr-2">
                     <svg
@@ -154,7 +155,9 @@ export default function Stock() {
                     {index + 1}
                   </span>
                   <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
-                  <span className="text-sm">{subscriber.name}</span>
+                  <span className="text-sm">
+                    {subscriber.name}
+                  </span>
                 </div>
               </td>
               <td className={`${tableCellStyle} text-right`}>{subscriber.count}만명</td>
