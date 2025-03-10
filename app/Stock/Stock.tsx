@@ -18,23 +18,24 @@ type Subscriber = {
 
 export default function Stock() {
   const [selectedPeriod, setSelectedPeriod] = useState('실시간');
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [sortField, setSortField] = useState("");
   const [sortOrderSubscribers, setSortOrderSubscribers] = useState('desc');
   const [sortOrderVolume, setSortOrderVolume] = useState('asc');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
     { name: '더블비', count: 180, price: 25000, category: '개그', volume: '2,500,000주', rate: '+8.0%', liked: false },
     { name: '뿌꾸', count: 160, price: 18500, category: '게임', volume: '1,000,000주', rate: '-1.5%', liked: false },
     { name: '미미미누', count: 190, price: 32000, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
   ]);
 
-  const periods = [
-    '실시간', 
-    '1시간', 
-    '6시간', 
-    '1일', 
-    '1주일', 
-    '1개월'
-  ];
+  const displayedSubscribers = selectedCategory 
+    ? subscribers.filter(item => item.category === selectedCategory)
+    : subscribers;
+
+  const timeOptions = ['1시간', '6시간', '1일', '1주일', '1개월'];
+  const categoryOptions = ['개그', '게임', '학습/공부'];
 
   const weekTitle = (
     <div className="flex items-center">
@@ -84,29 +85,83 @@ export default function Stock() {
     <div className="mt-4">
       {weekTitle}
       {subTitle}
+
       <div className="flex gap-4 mb-4 relative mt-3">
-        {periods.map((period) => (
+        <div className="relative inline-block">
           <button
-            key={period}
-            className={`text-sm relative px-3 py-1.5 rounded-[8px] mb-3 cursor-pointer ${
-              selectedPeriod === period 
-                ? 'text-blue-700 font-medium bg-blue-50' 
-                : 'text-gray-700 bg-gray-50 hover:bg-gray-100'
-            }`}
-            onClick={() => setSelectedPeriod(period)}
+            type="button"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer text-blue-700 font-medium bg-blue-50"
           >
-            {period === '실시간' && (
-              <span className="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4 mr-1">
-                  <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clipRule="evenodd" />
-                </svg>
-                <span className={selectedPeriod === '실시간' ? 'text-blue-700' : 'text-gray-700'}>{period}</span>
-              </span>
-            )}
-            {period !== '실시간' && period}
+            <span className="flex items-center">
+              {selectedPeriod}
+              <svg
+                className={`ml-1 h-4 w-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
           </button>
-        ))}
+          {dropdownOpen && (
+            <div className="absolute mt-2 bg-white shadow-lg rounded-md w-full z-10">
+              {timeOptions.map((option) => (
+                <button
+                  key={option}
+                  onClick={() => {
+                    setSelectedPeriod(option);
+                    setDropdownOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="relative inline-block">
+          <button
+            type="button"
+            onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+            className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${selectedCategory ? 'text-blue-700 font-medium bg-blue-50' : 'text-gray-700 bg-gray-50 hover:bg-gray-100'}`}
+          >
+            <span className="flex items-center">
+              {selectedCategory ? selectedCategory : "전체"}
+              <svg
+                className={`ml-1 h-4 w-4 transition-transform duration-200 ${categoryDropdownOpen ? 'rotate-180' : ''}`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </button>
+          {categoryDropdownOpen && (
+            <div className="absolute mt-2 bg-white shadow-lg rounded-md w-full z-10">
+              {categoryOptions.map((option) => (
+                <button
+                  key={option}
+                  onClick={() => {
+                    setSelectedCategory(option);
+                    setCategoryDropdownOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse table-fixed rounded-lg overflow-hidden">
           <thead>
@@ -177,7 +232,7 @@ export default function Stock() {
             </tr>
           </thead>
           <tbody>
-            {subscribers.map((subscriber, index) => (
+            {displayedSubscribers.map((subscriber, index) => (
               <tr
                 className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white rounded-lg' : 'bg-[#F9FAFB] rounded-[8px]'}`}
                 key={index}
