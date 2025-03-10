@@ -33,6 +33,14 @@ export default function SubscriberFilter({
 }: SubscriberFilterProps) {
   const [subscriberFilterOpen, setSubscriberFilterOpen] = useState(false);
   const subscriberFilterRef = useRef<HTMLDivElement>(null);
+  const rangeRef = useRef<HTMLDivElement>(null);
+  const minThumbRef = useRef<HTMLDivElement>(null);
+  const maxThumbRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  
+  const MIN = 150;
+  const MAX = 640;
+  const RANGE = MAX - MIN;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,21 +55,79 @@ export default function SubscriberFilter({
     };
   }, []);
 
-  function handleMinSliderChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = parseInt(e.target.value);
-    if (value >= 150 && value <= maxSliderValue) {
-        setMinSliderValue(value);
-        setMinInput(value.toString());
+  useEffect(() => {
+    if (!rangeRef.current || !minThumbRef.current || !maxThumbRef.current || !trackRef.current) return;
+    
+    const minPercent = ((minSliderValue - MIN) / RANGE) * 100;
+    const maxPercent = ((maxSliderValue - MIN) / RANGE) * 100;
+    
+    if (trackRef.current) {
+      trackRef.current.style.left = `${minPercent}%`;
+      trackRef.current.style.width = `${maxPercent - minPercent}%`;
     }
-  }
+    
+    minThumbRef.current.style.left = `${minPercent}%`;
+    maxThumbRef.current.style.left = `${maxPercent}%`;
+  }, [minSliderValue, maxSliderValue]);
 
-  function handleMaxSliderChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = parseInt(e.target.value);
-    if (value <= 640 && value >= minSliderValue) {
-        setMaxSliderValue(value);
-        setMaxInput(value.toString());
-    }
-  }
+  const handleMinMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    const startX = e.clientX;
+    const startLeft = ((minSliderValue - MIN) / RANGE) * 100;
+    const rangeWidth = rangeRef.current?.getBoundingClientRect().width || 0;
+    
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaPercent = (deltaX / rangeWidth) * 100;
+      const newPercent = Math.min(Math.max(0, startLeft + deltaPercent), maxPercent - 5);
+      const newValue = Math.round(MIN + (newPercent * RANGE) / 100);
+      
+      if (newValue >= MIN && newValue <= maxSliderValue - 1) {
+        setMinSliderValue(newValue);
+        setMinInput(newValue.toString());
+      }
+    };
+    
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMaxMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    const startX = e.clientX;
+    const startLeft = ((maxSliderValue - MIN) / RANGE) * 100;
+    const rangeWidth = rangeRef.current?.getBoundingClientRect().width || 0;
+    
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaPercent = (deltaX / rangeWidth) * 100;
+      const newPercent = Math.min(Math.max(minPercent + 5, startLeft + deltaPercent), 100);
+      const newValue = Math.round(MIN + (newPercent * RANGE) / 100);
+      
+      if (newValue <= MAX && newValue >= minSliderValue + 1) {
+        setMaxSliderValue(newValue);
+        setMaxInput(newValue.toString());
+      }
+    };
+    
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const minPercent = ((minSliderValue - MIN) / RANGE) * 100;
+  const maxPercent = ((maxSliderValue - MIN) / RANGE) * 100;
 
   function applySubscriberFilter() {
     setAppliedMin(minSliderValue);
@@ -118,27 +184,34 @@ export default function SubscriberFilter({
         <div className="absolute mt-2 p-4 bg-white shadow-lg rounded-md w-64 z-10">
           <div className="text-sm font-medium mb-3 text-black">구독자 범위 설정</div>
 
-          <div className="relative mb-6 h-6">
-            <input
-              type="range"
-              min="150"
-              max="640"
-              value={minSliderValue}
-              onChange={handleMinSliderChange}
-              className="absolute w-full h-1 bg-transparent appearance-none cursor-pointer z-20"
-              style={{ outline: 'none' }}
-            />
-            <input
-              type="range"
-              min="150"
-              max="640"
-              value={maxSliderValue}
-              onChange={handleMaxSliderChange}
-              className="absolute w-full h-1 bg-transparent appearance-none cursor-pointer z-30"
-              style={{ outline: 'none' }}
-            />
-            <div className="absolute w-full h-1 bg-gray-200 rounded-lg z-10"></div>
-            <div className="absolute flex justify-between w-full mt-7 z-40">
+          <div className="relative mb-8 px-2">
+            <div 
+              ref={rangeRef}
+              className="h-1 w-full bg-gray-200 rounded-lg relative"
+              style={{ marginTop: "15px" }}
+            >
+              <div
+                ref={trackRef}
+                className="absolute h-1 bg-blue-500 rounded-lg"
+                style={{ 
+                  left: `${minPercent}%`, 
+                  width: `${maxPercent - minPercent}%` 
+                }}
+              ></div>
+              <div
+                ref={minThumbRef}
+                className="absolute w-4 h-4 bg-white border border-gray-300 rounded-full -mt-1.5 -ml-2 shadow cursor-pointer"
+                style={{ left: `${minPercent}%` }}
+                onMouseDown={handleMinMouseDown}
+              ></div>
+              <div
+                ref={maxThumbRef}
+                className="absolute w-4 h-4 bg-white border border-gray-300 rounded-full -mt-1.5 -ml-2 shadow cursor-pointer"
+                style={{ left: `${maxPercent}%` }}
+                onMouseDown={handleMaxMouseDown}
+              ></div>
+            </div>
+            <div className="absolute flex justify-between w-full mt-3">
               <div className="text-xs text-gray-500">{minSliderValue}만</div>
               <div className="text-xs text-gray-500">{maxSliderValue}만</div>
             </div>
@@ -154,7 +227,7 @@ export default function SubscriberFilter({
                   const value = e.target.value;
                   setMinInput(value);
                   const parsed = parseInt(value);
-                  if (!isNaN(parsed) && parsed >= 150 && parsed <= maxSliderValue) {
+                  if (!isNaN(parsed) && parsed >= MIN && parsed <= maxSliderValue - 1) {
                     setMinSliderValue(parsed);
                   }
                 }}
@@ -172,7 +245,7 @@ export default function SubscriberFilter({
                   const value = e.target.value;
                   setMaxInput(value);
                   const parsed = parseInt(value);
-                  if (!isNaN(parsed) && parsed <= 640 && parsed >= minSliderValue) {
+                  if (!isNaN(parsed) && parsed <= MAX && parsed >= minSliderValue + 1) {
                     setMaxSliderValue(parsed);
                   }
                 }}
