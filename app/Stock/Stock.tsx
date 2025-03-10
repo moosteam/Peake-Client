@@ -71,10 +71,10 @@ export default function Stock() {
         {periods.map((period) => (
           <button
             key={period}
-            className={`text-sm relative px-3 py-2 rounded-[13px] cursor-pointer ${
+            className={`text-sm relative px-3 py-2 rounded-[8px] cursor-pointer ${
               selectedPeriod === period 
-                ? 'text-blue-500 font-medium bg-blue-50' 
-                : 'text-gray-500 bg-white'
+                ? 'text-blue-700 font-medium bg-blue-50' 
+                : 'text-gray-700 bg-gray-50'
             }`}
             onClick={() => setSelectedPeriod(period)}
           >
