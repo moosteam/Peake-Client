@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import List, { Subscriber } from '../components/list/list';
-import Category from '../components/category/category';
+import List, { Subscriber } from '../components/stock/list/list';
+import Category from '../components/stock/category/category';
 
 export default function Stock() {
   const [selectedPeriod, setSelectedPeriod] = useState('실시간');
