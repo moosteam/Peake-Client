@@ -90,7 +90,7 @@ export default function Stock() {
                 유튜버
               </th>
               <th
-                className={`${tableHeaderStyle} text-right w-1/9 ${sortField === 'subscribers' ? 'text-blue-500' : 'text-gray-500'}`}
+                className={`${tableHeaderStyle} text-right w-1/9 cursor-pointer ${sortField === 'subscribers' ? 'text-blue-500' : 'text-gray-500'}`}
                 onClick={handleSortSubscribers}
               >
                 구독자
@@ -121,7 +121,7 @@ export default function Stock() {
               <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500`}>등락률</th>
               <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500`}>카테고리</th>
               <th
-                className={`${tableHeaderStyle} text-right w-1/9 ${sortField === 'volume' ? 'text-blue-500' : 'text-gray-500'}`}
+                className={`${tableHeaderStyle} text-right w-1/9 cursor-pointer ${sortField === 'volume' ? 'text-blue-500' : 'text-gray-500'}`}
                 onClick={handleSortVolume}
               >
                 거래량
