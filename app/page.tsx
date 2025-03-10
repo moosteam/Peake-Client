@@ -12,8 +12,8 @@ export default function Home() {
       <Sidebar />
 
       <div className="flex-1 pl-[250px] pt-8">
-        <div className="bg-white rounded-lg w-[95%] max-w-[1200px] 2xl:max-w-[1600px] min-h-[94vh] mx-auto p-6 mt-2">
-          <SearchBar searchTime={searchTime} setSearchTime={setSearchTime} />
+        <div className="bg-white rounded-lg w-[95%] max-w-[1200px] 2xl:max-w-[1600px] min-h-[94vh] mx-auto p-6 mt-[-8]">
+          {/* <SearchBar searchTime={searchTime} setSearchTime={setSearchTime} /> */}
           <Stock />
         </div>
       </div>

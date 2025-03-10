@@ -29,6 +29,9 @@ export default function Stock() {
 
   const periods = ['실시간', '1시간', '6시간', '1일', '1주일', '1개월'];
 
+  const weekTitle = <h1 className="text-black mt-[-6px] text-[22px] font-semibold">모든 주식 목록</h1>;
+  const subTitle = <h2 className="text-gray-700 text-[15px] mb-4">대한민국의 150만 이상 유튜브 채널에 대한 모든 주식 목록이에요.</h2>;
+
   function toggleFavorite(index: number) {
     const newSubscribers = [...subscribers];
     newSubscribers[index] = { ...newSubscribers[index], liked: !newSubscribers[index].liked };
@@ -67,11 +70,13 @@ export default function Stock() {
 
   return (
     <div className="mt-4">
+      {weekTitle}
+      {subTitle}
       <div className="flex gap-4 mb-4 relative mt-3">
         {periods.map((period) => (
           <button
             key={period}
-            className={`text-sm relative px-3 py-2 rounded-[8px] cursor-pointer ${
+            className={`text-sm relative px-3 py-1.5 rounded-[8px] mb-3 cursor-pointer ${
               selectedPeriod === period 
                 ? 'text-blue-700 font-medium bg-blue-50' 
                 : 'text-gray-700 bg-gray-50'
