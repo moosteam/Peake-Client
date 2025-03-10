@@ -33,7 +33,7 @@ export default function Sidebar() {
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const linkStyle = isActive 
-            ? "flex items-center text-blue-500 py-3 px-4 text-[14px] font-medium bg-[#F0F7FF] rounded-lg mx-2" 
+            ? "flex items-center text-blue-700 py-3 px-4 text-[14px] font-medium bg-blue-50 rounded-lg mx-2" 
             : "flex items-center text-gray-700 hover:text-blue-500 py-3 px-4 text-[14px] font-medium mx-2";
           return (
             <Link key={item.href} href={item.href} className={linkStyle}>
