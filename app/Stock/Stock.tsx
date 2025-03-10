@@ -184,7 +184,7 @@ export default function Stock() {
               >
                 <td className={tableCellStyle}>
                   <div className="flex items-center">
-                    <button onClick={() => toggleFavorite(index)} className="mr-2">
+                    <button onClick={() => toggleFavorite(index)} className="mr-2 cursor-pointer">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
@@ -198,7 +198,7 @@ export default function Stock() {
                         />
                       </svg>
                     </button>
-                    <span className="inline-block w-5 text-center mr-4 text-blue-500 text-sm">
+                    <span className="inline-block w-5 text-center mr-4 text-blue-700 text-sm">
                       {index + 1}
                     </span>
                     <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
