@@ -27,7 +27,7 @@ export default function Stock() {
     { name: '미미미누', count: 190, price: 32000, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
   ]);
 
-  const periods = ['실시간', '1일', '1주일', '1개월', '3개월', '6개월', '1년'];
+  const periods = ['실시간', '1시간', '6시간', '1일', '1주일', '1개월'];
 
   function toggleFavorite(index: number) {
     const newSubscribers = [...subscribers];
