@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Peake',
-  description: '모의 유튜버 주식 투자 서비스',
+  description: '모의 유튜버 채널 주식 투자 서비스',
+};
+
+export const viewport = {
   themeColor: '#000000',
 };
 
