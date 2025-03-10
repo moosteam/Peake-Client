@@ -25,11 +25,13 @@ export default function Stock() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [subscriberFilterOpen, setSubscriberFilterOpen] = useState(false);
-  const [minInput, setMinInput] = useState<string>(""); 
-  const [maxInput, setMaxInput] = useState<string>("");
+  const [minInput, setMinInput] = useState<string>("150");
+  const [maxInput, setMaxInput] = useState<string>("640");
   const [appliedMin, setAppliedMin] = useState<number>(150);
   const [appliedMax, setAppliedMax] = useState<number>(0);
-  const [sliderValue, setSliderValue] = useState<number>(150);
+
+  const [minSliderValue, setMinSliderValue] = useState<number>(150);
+  const [maxSliderValue, setMaxSliderValue] = useState<number>(640);
 
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
     { name: '더블비', count: 180, price: 25000, category: '개그', volume: '2,500,000주', rate: '+8.0%', liked: false },
@@ -113,24 +115,33 @@ export default function Stock() {
     setSubscribers(sortedSubscribers);
   }
 
-  function handleSliderChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleMinSliderChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = parseInt(e.target.value);
-    setSliderValue(value);
-    setMaxInput(value.toString());
+    if (value >= 150 && value <= maxSliderValue) {
+        setMinSliderValue(value);
+        setMinInput(value.toString());
+    }
+  }
+
+  function handleMaxSliderChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = parseInt(e.target.value);
+    if (value <= 640 && value >= minSliderValue) {
+        setMaxSliderValue(value);
+        setMaxInput(value.toString());
+    }
   }
 
   function applySubscriberFilter() {
-    const effectiveMin = minInput === "" ? 150 : parseInt(minInput);
-    const effectiveMax = maxInput === "" ? sliderValue : parseInt(maxInput);
-    setAppliedMin(effectiveMin);
-    setAppliedMax(effectiveMax);
+    setAppliedMin(minSliderValue);
+    setAppliedMax(maxSliderValue);
     setSubscriberFilterOpen(false);
   }
 
   function resetSubscriberFilter() {
-    setMinInput("");
-    setMaxInput("");
-    setSliderValue(150);
+    setMinInput("150");
+    setMaxInput("640");
+    setMinSliderValue(150);
+    setMaxSliderValue(640);
     setAppliedMin(150);
     setAppliedMax(0);
     setSubscriberFilterOpen(false);
@@ -155,9 +166,7 @@ export default function Stock() {
             <span className="flex items-center">
               <span className="ml-1">{selectedPeriod}</span>
               <svg
-                className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                  dropdownOpen ? 'rotate-180' : ''
-                }`}
+                className={`ml-1 h-4 w-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -208,9 +217,7 @@ export default function Stock() {
               </svg>
               <span className="ml-1">{selectedCategory ? selectedCategory : "전체"}</span>
               <svg
-                className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                  categoryDropdownOpen ? 'rotate-180' : ''
-                }`}
+                className={`ml-1 h-4 w-4 transition-transform duration-200 ${categoryDropdownOpen ? 'rotate-180' : ''}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -266,9 +273,7 @@ export default function Stock() {
               </svg>
               <span className="ml-1">{subscriberRangeText}</span>
               <svg
-                className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                  subscriberFilterOpen ? 'rotate-180' : ''
-                }`}
+                className={`ml-1 h-4 w-4 transition-transform duration-200 ${subscriberFilterOpen ? 'rotate-180' : ''}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -281,30 +286,48 @@ export default function Stock() {
 
           {subscriberFilterOpen && (
             <div className="absolute mt-2 p-4 bg-white shadow-lg rounded-md w-64 z-10">
-              <div className="text-sm font-medium mb-3 text-black">구독자 범위</div>
+              <div className="text-sm font-medium mb-3 text-black">구독자 범위 설정</div>
 
-              <div className="relative mb-6">
+              <div className="relative mb-6 h-6">
                 <input
                   type="range"
                   min="150"
                   max="640"
-                  value={sliderValue}
-                  className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  onChange={handleSliderChange}
+                  value={minSliderValue}
+                  onChange={handleMinSliderChange}
+                  className="absolute w-full h-1 bg-transparent appearance-none cursor-pointer z-20"
+                  style={{ outline: 'none' }}
                 />
-                <div className="absolute flex justify-between w-full mt-1">
-                  <div className="text-xs text-gray-500">150만</div>
-                  <div className="text-xs text-gray-500">{sliderValue}만</div>
+                <input
+                  type="range"
+                  min="150"
+                  max="640"
+                  value={maxSliderValue}
+                  onChange={handleMaxSliderChange}
+                  className="absolute w-full h-1 bg-transparent appearance-none cursor-pointer z-30"
+                  style={{ outline: 'none' }}
+                />
+                <div className="absolute w-full h-1 bg-gray-200 rounded-lg z-10"></div>
+                <div className="absolute flex justify-between w-full mt-7 z-40">
+                  <div className="text-xs text-gray-500">{minSliderValue}만</div>
+                  <div className="text-xs text-gray-500">{maxSliderValue}만</div>
                 </div>
               </div>
-
+              
               <div className="flex justify-between mb-1 space-x-2">
                 <div className="flex items-center w-full">
                   <input
                     type="text"
                     className="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700"
                     value={minInput}
-                    onChange={(e) => setMinInput(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setMinInput(value);
+                      const parsed = parseInt(value);
+                      if (!isNaN(parsed) && parsed >= 150 && parsed <= maxSliderValue) {
+                        setMinSliderValue(parsed);
+                      }
+                    }}
                     placeholder="150"
                   />
                   <span className="ml-1 text-sm text-gray-700">만</span>
@@ -316,13 +339,14 @@ export default function Stock() {
                     className="w-full border border-gray-300 rounded-lg px-2 py-1 text-sm text-gray-700"
                     value={maxInput}
                     onChange={(e) => {
-                      setMaxInput(e.target.value);
-                      const parsed = parseInt(e.target.value);
-                      if (!isNaN(parsed)) {
-                        setSliderValue(parsed);
+                      const value = e.target.value;
+                      setMaxInput(value);
+                      const parsed = parseInt(value);
+                      if (!isNaN(parsed) && parsed <= 640 && parsed >= minSliderValue) {
+                        setMaxSliderValue(parsed);
                       }
                     }}
-                    placeholder="1000"
+                    placeholder="640"
                   />
                   <span className="ml-1 text-sm text-gray-700">만</span>
                 </div>
@@ -364,9 +388,7 @@ export default function Stock() {
                 <button className="ml-1 relative top-[3px]">
                   {sortField === 'subscribers' ? (
                     <svg
-                      className={`h-4 w-4 text-blue-500 ${
-                        sortOrderSubscribers === 'asc' ? 'transform rotate-180' : ''
-                      }`}
+                      className={`h-4 w-4 text-blue-500 ${sortOrderSubscribers === 'asc' ? 'transform rotate-180' : ''}`}
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
@@ -399,9 +421,7 @@ export default function Stock() {
                 <button className="ml-1 relative top-[3px]">
                   {sortField === 'volume' ? (
                     <svg
-                      className={`h-4 w-4 text-blue-500 ${
-                        sortOrderVolume === 'asc' ? 'transform rotate-180' : ''
-                      }`}
+                      className={`h-4 w-4 text-blue-500 ${sortOrderVolume === 'asc' ? 'transform rotate-180' : ''}`}
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
@@ -427,9 +447,7 @@ export default function Stock() {
           <tbody>
             {displayedSubscribers.map((subscriber, index) => (
               <tr
-                className={`hover:bg-gray-50 ${
-                  index % 2 === 1 ? 'bg-white rounded-lg' : 'bg-[#F9FAFB] rounded-[8px]'
-                }`}
+                className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white rounded-lg' : 'bg-[#F9FAFB] rounded-[8px]'}`}
                 key={index}
               >
                 <td className={tableCellStyle}>
@@ -475,5 +493,5 @@ export default function Stock() {
         </table>
       </div>
     </div>
-  );
+  );  
 }
