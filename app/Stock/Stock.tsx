@@ -38,7 +38,7 @@ export default function Stock() {
 
   const weekTitle = (
     <div className="flex items-center">
-      <h1 className="text-black mt-[-6px] text-[22px] font-semibold">모든 주식 목록</h1>
+      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">모든 주식 목록</h1>
       {/* <span className="text-blue-900 text-sm ml-4">오늘 12시 20분 기준</span> */}
     </div>
   );
@@ -91,7 +91,7 @@ export default function Stock() {
             className={`text-sm relative px-3 py-1.5 rounded-[8px] mb-3 cursor-pointer ${
               selectedPeriod === period 
                 ? 'text-blue-700 font-medium bg-blue-50' 
-                : 'text-gray-700 bg-gray-50'
+                : 'text-gray-700 bg-gray-50 hover:bg-gray-100'
             }`}
             onClick={() => setSelectedPeriod(period)}
           >
