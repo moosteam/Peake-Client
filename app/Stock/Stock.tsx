@@ -17,7 +17,7 @@ type Subscriber = {
 };
 
 export default function Stock() {
-  const [selectedPeriod, setSelectedPeriod] = useState('1일');
+  const [selectedPeriod, setSelectedPeriod] = useState('실시간');
   const [sortField, setSortField] = useState("");
   const [sortOrderSubscribers, setSortOrderSubscribers] = useState('desc');
   const [sortOrderVolume, setSortOrderVolume] = useState('asc');
