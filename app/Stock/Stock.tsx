@@ -27,7 +27,7 @@ export default function Stock() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
     { name: '더블비', count: 180, price: 25000, category: '개그', volume: '2,500,000주', rate: '+8.0%', liked: false },
     { name: '뿌꾸', count: 160, price: 18500, category: '게임', volume: '1,000,000주', rate: '-1.5%', liked: false },
-    { name: '미미미누', count: 190, price: 32000, category: '학습/공부', volume: '500,000주', rate: '+0.5%', liked: false },
+    { name: '미미미누', count: 190, price: 32000, category: '학습', volume: '500,000주', rate: '+0.5%', liked: false },
   ]);
 
   const displayedSubscribers = selectedCategory 
@@ -35,7 +35,7 @@ export default function Stock() {
     : subscribers;
 
   const timeOptions = ['1시간', '6시간', '1일', '1주일', '1개월'];
-  const categoryOptions = ['개그', '게임', '학습/공부'];
+  const categoryOptions = ['개그', '게임', '학습'];
 
   const weekTitle = (
     <div className="flex items-center">
@@ -43,7 +43,11 @@ export default function Stock() {
       {/* <span className="text-blue-900 text-sm ml-4">오늘 12시 20분 기준</span> */}
     </div>
   );
-  const subTitle = <h2 className="text-gray-700 text-[15px] mb-4">대한민국 150만 이상 유튜브 채널에 대한 모든 주식 목록이에요.</h2>;
+  const subTitle = (
+    <h2 className="text-gray-700 text-[15px] mb-4">
+      대한민국 150만 이상 유튜브 채널에 대한 모든 주식 목록이에요.
+    </h2>
+  );
 
   function toggleFavorite(index: number) {
     const newSubscribers = [...subscribers];
@@ -94,7 +98,19 @@ export default function Stock() {
             className="text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer text-blue-700 font-medium bg-blue-50"
           >
             <span className="flex items-center">
-              {selectedPeriod}
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                className="inline-block w-5 h-5"
+              >
+                <path 
+                  fillRule="evenodd" 
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" 
+                  clipRule="evenodd" 
+                />
+              </svg>
+              <span className="ml-1">{selectedPeriod}</span>
               <svg
                 className={`ml-1 h-4 w-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +147,17 @@ export default function Stock() {
             className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${selectedCategory ? 'text-blue-700 font-medium bg-blue-50' : 'text-gray-700 bg-gray-50 hover:bg-gray-100'}`}
           >
             <span className="flex items-center">
-              {selectedCategory ? selectedCategory : "전체"}
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                className="inline-block w-5 h-5"
+              >
+                <path 
+                  d="M18.75 12.75h1.5a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM12 6a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 6ZM12 18a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 18ZM3.75 6.75h1.5a.75.75 0 1 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM5.25 18.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 0 1.5ZM3 12a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 3 12ZM9 3.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z"
+                />
+              </svg>
+              <span className="ml-1">{selectedCategory ? selectedCategory : "전체"}</span>
               <svg
                 className={`ml-1 h-4 w-4 transition-transform duration-200 ${categoryDropdownOpen ? 'rotate-180' : ''}`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -257,9 +283,7 @@ export default function Stock() {
                       {index + 1}
                     </span>
                     <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
-                    <span className="text-sm">
-                      {subscriber.name}
-                    </span>
+                    <span className="text-sm">{subscriber.name}</span>
                   </div>
                 </td>
                 <td className={`${tableCellStyle} text-right`}>{subscriber.count}만명</td>
