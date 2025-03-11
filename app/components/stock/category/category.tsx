@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import SubscriberFilter from '../subscriber/subscriber';
 
 type CategoryProps = {
@@ -42,9 +42,30 @@ export default function Category({
 }: CategoryProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const timeOptions = ['1시간', '6시간', '1일', '1주일', '1개월'];
   const categoryOptions = ['개그', '게임', '학습'];
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/' && 
+          document.activeElement?.tagName !== 'INPUT' && 
+          document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <div className="flex gap-4 mb-4 relative mt-3">
@@ -163,8 +184,9 @@ export default function Category({
         <button
           type="button"
           onClick={() => {
-            setSelectedCategory("");
-            setCategoryDropdownOpen(false);
+            if (searchInputRef.current) {
+              searchInputRef.current.focus();
+            }
           }}
           className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${
             selectedCategory
@@ -182,7 +204,10 @@ export default function Category({
               <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
             </svg>
             <input
+              ref={searchInputRef}
               type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
               placeholder="채널명을 검색하세요."
               className="ml-2 border-none focus:outline-none"
             />
