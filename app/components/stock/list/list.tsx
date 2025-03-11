@@ -72,7 +72,7 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
         <thead>
           <tr className="border-b">
             <th className={`${tableHeaderStyle} text-left w-1/7 rounded-tl-lg text-gray-500`}>
-              유튜버
+              <div className="relative left-[-6px]">유튜버</div>
             </th>
             <th
               className={`${tableHeaderStyle} text-right w-1/9 cursor-pointer ${
