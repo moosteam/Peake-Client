@@ -180,7 +180,7 @@ export default function Category({
         appliedMax={appliedMax}
         setAppliedMax={setAppliedMax}
       />
-      <div className="relative inline-block ml-220 mb-4">
+      <div className="relative inline-block ml-225 mb-5">
         <button
           type="button"
           onClick={() => {

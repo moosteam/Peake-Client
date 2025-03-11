@@ -136,7 +136,7 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
               </button>
             </th>
             <th className={`${tableHeaderStyle} text-right w-1/9 rounded-tr-lg text-gray-500`}>
-              <div className="relative -left-14">안전율</div>
+              <div className="relative -left-10">안전율</div>
             </th>
           </tr>
         </thead>
@@ -179,7 +179,7 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
               <td className={`${tableCellStyle} text-right`}>{subscriber.category}</td>
               <td className={`${tableCellStyle} text-right`}>{subscriber.volume}</td>
               <td className={`${tableCellStyle} text-right rounded-tr-lg rounded-br-lg`}>
-                <div className="relative -left-14">
+                <div className="relative -left-10">
                   <span className="text-blue-500">0.5%</span>
                 </div>
               </td>
