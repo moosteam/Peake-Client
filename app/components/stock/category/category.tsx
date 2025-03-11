@@ -68,7 +68,7 @@ export default function Category({
   }, []);
 
   return (
-    <div className="flex gap-4 mb-4 relative mt-3">
+    <div className="flex gap-4 mb-4 relative mt-3 whitespace-nowrap">
       <div className="relative inline-block">
         <button
           type="button"

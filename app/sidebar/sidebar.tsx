@@ -17,7 +17,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 h-screen bg-white border-r border-gray-200 fixed left-0 top-0">
       <div className="p-4">
-        <Link href="/" className="flex items-center justify-left">
+        <Link href="/" className="flex items-center justify-left mt-8 mb-2">
           <Image
             src="/logo.svg"
             alt="logo"
