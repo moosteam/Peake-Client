@@ -91,8 +91,8 @@ export default function Category({
           onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
           className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${
             selectedCategory
-              ? 'text-blue-700 font-medium bg-blue-50'
-              : 'text-gray-700 bg-gray-50 hover:bg-gray-100'
+              ? 'text-blue-700 font-medium bg-gray-100'
+              : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
           }`}
         >
           <span className="flex items-center">
@@ -159,6 +159,36 @@ export default function Category({
         appliedMax={appliedMax}
         setAppliedMax={setAppliedMax}
       />
+      <div className="relative inline-block">
+        <button
+          type="button"
+          onClick={() => {
+            setSelectedCategory("");
+            setCategoryDropdownOpen(false);
+          }}
+          className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${
+            selectedCategory
+              ? 'text-blue-700 font-medium bg-blue-50'
+              : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
+          }`}
+        >
+          <span className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-4 text-gray-900"
+            >
+              <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+            </svg>
+            <input
+              type="text"
+              placeholder="채널명을 검색하세요."
+              className="ml-2 border-none focus:outline-none text-gray-700"
+            />
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

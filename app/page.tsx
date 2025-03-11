@@ -8,7 +8,7 @@ export default function Home() {
   const [searchTime, setSearchTime] = useState('');
 
   return (
-    <div className="flex min-h-screen bg-[#F3F4F6]">
+    <div className="flex min-h-screen bg-[#FFFFFF]">
       <Sidebar />
 
       <div className="flex-1 pl-[250px] pt-8">

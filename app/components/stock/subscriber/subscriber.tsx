@@ -155,7 +155,7 @@ export default function SubscriberFilter({
         type="button"
         onClick={() => setSubscriberFilterOpen(!subscriberFilterOpen)}
         className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${
-          appliedMax ? 'text-blue-700 font-medium bg-blue-50' : 'text-gray-700 bg-gray-50 hover:bg-gray-100'
+          appliedMax ? 'text-blue-700 font-medium bg-blue-50' : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
         }`}
       >
         <span className="flex items-center">
