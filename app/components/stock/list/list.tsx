@@ -143,33 +143,33 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
         <tbody>
           {displayedSubscribers.map((subscriber, index) => (
             <tr
-              className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white rounded-lg' : 'bg-[#F9FAFB] rounded-[8px]'}`}
+              className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white' : 'bg-gray-50'}`}
               key={index}
             >
-              <td className={tableCellStyle}>
+              <td className={`${tableCellStyle} rounded-lg ${index === 0 ? 'rounded-tl-lg' : ''} ${index === displayedSubscribers.length - 1 ? 'rounded-bl-lg' : ''}`}>
                 <div className="flex items-center">
-                  <button onClick={() => toggleFavorite(index)} className="mr-2 cursor-pointer">
+                  <button onClick={() => toggleFavorite(index)} className="cursor-pointer">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
+                      viewBox="0 0 24 24"
                       fill={subscriber.liked ? "#ef4444" : "#d1d5db"}
-                      className="w-5 h-5"
+                      className="w-4 h-4"
                     >
                       <path
                         fillRule="evenodd"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                        d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z"
                         clipRule="evenodd"
                       />
                     </svg>
                   </button>
-                  <span className="inline-block w-5 text-center mr-4 text-blue-700 text-sm">
+                  <span className="inline-block w-5 text-center mr-4 text-blue-700 text-sm ml-4">
                     {index + 1}
                   </span>
-                  <img src="/image.jpg" alt="US" className="w-8 h-8 mr-2 rounded-full" />
+                  <img src="/image.jpg" alt="kr" className="w-7 h-7 mr-3 rounded-full" />
                   <span className="text-sm">{subscriber.name}</span>
                 </div>
               </td>
-              <td className={`${tableCellStyle} text-right`}>{subscriber.count}만명</td>
+              <td className={`${tableCellStyle} text-right ${index === displayedSubscribers.length - 1 ? 'rounded-br-lg' : ''}`}>{subscriber.count}만명</td>
               <td className={`${tableCellStyle} text-right pl-6`}>{subscriber.price.toLocaleString()}원</td>
               <td className="px-3 py-2 text-sm text-right">
                 <div className={subscriber.rate.includes('-') ? "text-red-500" : "text-blue-500"}>
@@ -178,7 +178,7 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
               </td>
               <td className={`${tableCellStyle} text-right`}>{subscriber.category}</td>
               <td className={`${tableCellStyle} text-right`}>{subscriber.volume}</td>
-              <td className="px-3 py-2 text-sm text-right">
+              <td className={`${tableCellStyle} text-right rounded-tr-lg rounded-br-lg`}>
                 <div className="relative -left-14">
                   <span className="text-blue-500">0.5%</span>
                 </div>
