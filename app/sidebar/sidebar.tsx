@@ -21,7 +21,7 @@ export default function Sidebar() {
   ];
   
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-200 fixed left-0 top-0 px-2 overflow-y-auto">
+    <aside className="w-64 h-screen bg-white fixed left-0 top-0 px-2 overflow-y-auto">
       <div className="p-4">
         <Link href="/" className="flex items-center justify-left mt-6 mb-4">
           <Image
@@ -35,7 +35,7 @@ export default function Sidebar() {
         </Link>
       </div>
       
-      <div className="px-4 py-2 text-sm font-medium text-gray-500">
+      <div className="px-4 py-2 text-sm font-medium text-gray-500 mt-2">
         메인
       </div>
       

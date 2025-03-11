@@ -145,6 +145,7 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
             <tr
               className={`hover:bg-gray-50 ${index % 2 === 1 ? 'bg-white' : 'bg-gray-50'}`}
               key={index}
+              onClick={() => window.location.href = '/info'}
             >
               <td className={`${tableCellStyle} rounded-lg ${index === 0 ? 'rounded-tl-lg' : ''} ${index === displayedSubscribers.length - 1 ? 'rounded-bl-lg' : ''}`}>
                 <div className="flex items-center">
