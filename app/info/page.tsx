@@ -1,31 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import {ChartComponent} from "../components/stock/chart/chart"
+import { ChartComponent } from "../components/stock/chart/chart";
+import type { SeriesType } from "../components/stock/chart/chart";
+
 export default function Home() {
+  const [chartType, setChartType] = useState<SeriesType>('candlestick');
+  
   const candlestickData = [
-    { time: '2025-07-03', open: 583, high: 605, low: 560, close: 575 , value: 500},
-    { time: '2025-07-04', open: 575, high: 590, low: 550, close: 588 , value: 500},
-    { time: '2025-07-05', open: 588, high: 620, low: 570, close: 615 , value: 500},
-    { time: '2025-07-06', open: 615, high: 650, low: 600, close: 625 , value: 500},
-    { time: '2025-07-07', open: 625, high: 640, low: 595, close: 635 , value: 500},
-    { time: '2025-07-08', open: 635, high: 670, low: 620, close: 660 , value: 500},
-    { time: '2025-07-09', open: 660, high: 700, low: 650, close: 685 , value: 500},
-    { time: '2025-07-10', open: 685, high: 720, low: 670, close: 710 , value: 500},
-    { time: '2025-07-11', open: 710, high: 750, low: 700, close: 735 , value: 500},
-    { time: '2025-07-12', open: 735, high: 770, low: 720, close: 755 , value: 500},
-    { time: '2025-07-13', open: 755, high: 790, low: 740, close: 780 , value: 500},
-    { time: '2025-07-14', open: 780, high: 820, low: 770, close: 805 , value: 500},
-    { time: '2025-07-15', open: 805, high: 840, low: 790, close: 825 , value: 500},
-    { time: '2025-07-16', open: 825, high: 860, low: 810, close: 845 , value: 500},
-    { time: '2025-07-17', open: 845, high: 880, low: 830, close: 865 , value: 500},
-    { time: '2025-07-18', open: 865, high: 900, low: 850, close: 885 , value: 500},
-    { time: '2025-07-19', open: 885, high: 920, low: 870, close: 905 , value: 500},
-    { time: '2025-07-20', open: 905, high: 940, low: 890, close: 925 , value: 500},
-    { time: '2025-07-21', open: 925, high: 960, low: 910, close: 945 , value: 500},
-    { time: '2025-07-22', open: 945, high: 980, low: 930, close: 965 , value: 500},
-    { time: '2025-07-23', open: 965, high: 1000, low: 950, close: 985 , value: 500},
+    { time: '2025-07-03', open: 583, high: 605, low: 560, close: 575, value: 500 },
+    { time: '2025-07-04', open: 575, high: 590, low: 550, close: 588, value: 500 },
+    { time: '2025-07-05', open: 588, high: 620, low: 570, close: 615, value: 500 },
+    { time: '2025-07-06', open: 615, high: 650, low: 600, close: 625, value: 500 },
+    { time: '2025-07-07', open: 625, high: 640, low: 595, close: 635, value: 500 },
+    { time: '2025-07-08', open: 635, high: 670, low: 620, close: 660, value: 500 },
+    { time: '2025-07-09', open: 660, high: 700, low: 650, close: 685, value: 500 },
+    { time: '2025-07-10', open: 685, high: 720, low: 670, close: 710, value: 500 },
+    { time: '2025-07-11', open: 710, high: 750, low: 700, close: 735, value: 500 },
+    { time: '2025-07-12', open: 735, high: 770, low: 720, close: 755, value: 500 },
+    { time: '2025-07-13', open: 755, high: 790, low: 740, close: 780, value: 500 },
+    { time: '2025-07-14', open: 780, high: 820, low: 770, close: 805, value: 500 },
+    { time: '2025-07-15', open: 805, high: 840, low: 790, close: 825, value: 500 },
+    { time: '2025-07-16', open: 825, high: 860, low: 810, close: 845, value: 500 },
+    { time: '2025-07-17', open: 845, high: 880, low: 830, close: 865, value: 500 },
+    { time: '2025-07-18', open: 865, high: 900, low: 850, close: 885, value: 500 },
+    { time: '2025-07-19', open: 885, high: 920, low: 870, close: 905, value: 500 },
+    { time: '2025-07-20', open: 905, high: 940, low: 890, close: 925, value: 500 },
+    { time: '2025-07-21', open: 925, high: 960, low: 910, close: 945, value: 500 },
+    { time: '2025-07-22', open: 945, high: 980, low: 930, close: 965, value: 500 },
+    { time: '2025-07-23', open: 965, high: 1000, low: 950, close: 985, value: 500 },
     { time: '2025-07-24', open: 985, high: 1020, low: 970, close: 1005, value: 500 },
     { time: '2025-07-25', open: 1005, high: 1040, low: 990, close: 1025, value: 500 },
     { time: '2025-07-26', open: 1025, high: 1060, low: 1010, close: 1045, value: 500 },
@@ -116,7 +120,18 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-col gap-4 mt-4 ml-[-100]">
-          <ChartComponent data={candlestickData}></ChartComponent>
+          <ChartComponent 
+            seriesType={chartType}
+            data={candlestickData}
+            onSeriesTypeChange={setChartType}
+            chartOptions={{
+              height: 400,
+              layout: {
+                background: { type: 'solid', color: 'white' },
+                textColor: 'black',
+              }
+            }}
+          />
         </div>
       </div>
     </div>
