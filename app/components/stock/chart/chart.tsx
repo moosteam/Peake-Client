@@ -1,4 +1,5 @@
-// 필요한 라이브러리 및 컴포넌트 가져오기
+'use client'
+
 import React, { useEffect, useRef } from 'react';
 import {
   createChart,
@@ -10,38 +11,32 @@ import {
   LineSeries,
   ColorType,
   IChartApi,
-  SeriesOptionsMap
+  SeriesOptionsMap,
 } from 'lightweight-charts';
 
-// 차트 색상 관련 인터페이스 정의
 interface ChartColors {
-  backgroundColor?: string;  // 배경색
-  lineColor?: string;        // 선 색상
-  textColor?: string;        // 텍스트 색상
-  areaTopColor?: string;     // 영역 상단 색상
-  areaBottomColor?: string;  // 영역 하단 색상
+  backgroundColor?: string;
+  lineColor?: string;
+  textColor?: string;
+  areaTopColor?: string;
+  areaBottomColor?: string;
 }
 
-// 시리즈 타입 정의
 export type SeriesType = 'area' | 'bar' | 'baseline' | 'candlestick' | 'histogram' | 'line';
 
-// 차트 컴포넌트 속성 인터페이스 정의
 interface ChartComponentProps {
-  seriesType?: SeriesType;                  // 시리즈 타입
-  data?: any[];                             // 차트 데이터 (시리즈 타입에 맞는 형식)
-  seriesOptions?: Record<string, any>;     // 시리즈별 옵션
-  chartOptions?: Record<string, any>;      // 차트 전체 옵션
-  colors?: ChartColors;                    // 차트 색상 설정 (선택적)
-  onSeriesTypeChange?: (type: SeriesType) => void; // 시리즈 타입 변경 핸들러
-  onTimeRangeChange?: (range: string) => void; // 시간 범위 변경 핸들러
+  seriesType?: SeriesType;
+  data?: any[];
+  seriesOptions?: Record<string, any>;
+  chartOptions?: Record<string, any>;
+  colors?: ChartColors;
+  onSeriesTypeChange?: (type: SeriesType) => void;
+  onTimeRangeChange?: (range: string) => void;
 }
 
-// 시간 범위 옵션
 const timeRangeOptions = ['1시간', '6시간', '1일', '1주일', '1개월'];
 
-// 차트 컴포넌트 정의
 export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
-  // props에서 데이터와 설정 추출
   const {
     seriesType = 'area',
     data = [],
@@ -52,21 +47,18 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     onTimeRangeChange,
   } = props;
 
-  // 선택된 시간 범위 상태
   const [selectedTimeRange, setSelectedTimeRange] = React.useState('1일');
 
   const {
-    backgroundColor = 'white',                        // 기본 배경색: 흰색
-    lineColor = '#2962FF',                           // 기본 선 색상: 파랑
-    textColor = 'black',                             // 기본 텍스트 색상: 검정
-    areaTopColor = '#2962FF',                        // 기본 영역 상단 색상: 파랑
-    areaBottomColor = 'rgba(41, 98, 255, 0.28)',     // 기본 영역 하단 색상: 투명한 파랑
+    backgroundColor = 'white',
+    lineColor = 'black',
+    textColor = 'black',
+    areaTopColor = '#2962FF',
+    areaBottomColor = 'rgba(41, 98, 255, 0.28)',
   } = colors;
 
-  // 차트를 그릴 DOM 요소에 대한 참조 생성
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 시리즈 타입 변경 핸들러
   const handleSeriesTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newType = e.target.value as SeriesType;
     if (onSeriesTypeChange) {
@@ -74,7 +66,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     }
   };
 
-  // 시간 범위 변경 핸들러
   const handleTimeRangeChange = (range: string) => {
     setSelectedTimeRange(range);
     if (onTimeRangeChange) {
@@ -82,10 +73,8 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     }
   };
 
-  // 컴포넌트 마운트 및 업데이트 시 차트 생성 및 관리
   useEffect(() => {
     if (containerRef.current) {
-      // 기본 차트 옵션 설정
       const defaultChartOptions = {
         layout: {
           background: { type: ColorType.Solid, color: backgroundColor },
@@ -98,150 +87,129 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           horzLines: { color: 'rgba(197, 203, 206, 0.5)' },
         },
         timeScale: {
-          borderColor: 'rgba(197, 203, 206, 0.8)',
+          // 기존 backgroundColor 대신 lineColor로 변경
+          borderColor: lineColor,
           timeVisible: true,
           secondsVisible: false,
         },
-        crosshair: {
-          mode: 1,
-          vertLine: {
-            width: 1,
-            color: 'rgba(32, 38, 46, 0.1)',
-            style: 0,
-          },
-          horzLine: {
-            width: 1,
-            color: 'rgba(32, 38, 46, 0.1)',
-            style: 0,
-          },
+        // 오른쪽 가격축 테두리도 lineColor로 변경
+        rightPriceScale: {
+          borderVisible: true,
+          borderColor: lineColor,
         },
-        ...chartOptions
+        ...chartOptions,
       };
 
-      // 차트 생성
-      const chart: IChartApi = createChart(containerRef.current, {
-        ...defaultChartOptions,
-        crosshair: {
-          mode: 1,
-          vertLine: {
-            color: 'rgba(32, 38, 46, 0.1)',
-            style: 0,
-          },
-          horzLine: {
-            color: 'rgba(32, 38, 46, 0.1)',
-            style: 0,
-          },
-        },
-      });
-      let series;
+      const chart: IChartApi = createChart(containerRef.current, defaultChartOptions);
 
-      // 시리즈 타입에 따라 분기 처리
+      const commonSeriesOptions = {
+        priceLineVisible: false,
+        lastValueVisible: true,
+      };
+
+      let series;
       switch (seriesType) {
         case 'area':
           series = chart.addSeries(AreaSeries, {
+            ...commonSeriesOptions,
             lineColor,
             topColor: areaTopColor,
             bottomColor: areaBottomColor,
             lineWidth: 2,
-            priceLineVisible: false,
-            lastValueVisible: true,
-            ...seriesOptions
+            ...seriesOptions,
           } as SeriesOptionsMap['Area']);
           break;
         case 'bar':
           series = chart.addSeries(BarSeries, {
-            upColor: '#26a69a',
-            downColor: '#ef5350',
-            priceLineVisible: false,
-            lastValueVisible: true,
-            ...seriesOptions
+            ...commonSeriesOptions,
+            upColor: '#E23C3C',
+            downColor: '#3C82E2',
+            ...seriesOptions,
           } as SeriesOptionsMap['Bar']);
           break;
         case 'baseline':
           series = chart.addSeries(BaselineSeries, {
+            ...commonSeriesOptions,
             baseValue: { type: 'price', price: 0 },
-            topLineColor: 'rgba(38, 166, 154, 1)',
-            topFillColor1: 'rgba(38, 166, 154, 0.28)',
-            topFillColor2: 'rgba(38, 166, 154, 0.05)',
-            bottomLineColor: 'rgba(239, 83, 80, 1)',
-            bottomFillColor1: 'rgba(239, 83, 80, 0.28)',
-            bottomFillColor2: 'rgba(239, 83, 80, 0.05)',
+            topLineColor: '#E23C3C',
+            topFillColor1: '#E23C3C',
+            topFillColor2: '#3C82E2',
+            bottomLineColor: '#3C82E2',
+            bottomFillColor1: '#3C82E2',
+            bottomFillColor2: '#E23C3C',
             lineWidth: 2,
-            priceLineVisible: false,
-            lastValueVisible: true,
-            ...seriesOptions
+            ...seriesOptions,
           } as SeriesOptionsMap['Baseline']);
           break;
         case 'candlestick':
           series = chart.addSeries(CandlestickSeries, {
-            upColor: '#26a69a',
-            downColor: '#ef5350',
+            ...commonSeriesOptions,
+            upColor: '#E23C3C',
+            downColor: '#3C82E2',
             borderVisible: true,
-            wickUpColor: '#26a69a',
-            wickDownColor: '#ef5350',
-            priceLineVisible: false,
-            lastValueVisible: true,
-            ...seriesOptions
+            wickUpColor: '#E23C3C',
+            wickDownColor: '#3C82E2',
+            borderUpColor: '#E23C3C',   // 상승 캔들의 테두리 색상 추가
+            borderDownColor: '#3C82E2', // 하락 캔들의 테두리 색상 추가
+            ...seriesOptions,
           } as SeriesOptionsMap['Candlestick']);
           break;
         case 'histogram':
           series = chart.addSeries(HistogramSeries, {
-            color: '#26a69a',
-            priceFormat: {
-              type: 'volume',
-            },
-            priceLineVisible: false,
-            lastValueVisible: true,
-            ...seriesOptions
+            ...commonSeriesOptions,
+            color: '#E23C3C',
+            priceFormat: { type: 'volume' },
+            ...seriesOptions,
           } as SeriesOptionsMap['Histogram']);
           break;
         case 'line':
           series = chart.addSeries(LineSeries, {
+            ...commonSeriesOptions,
             color: lineColor,
             lineWidth: 2,
             crosshairMarkerVisible: true,
-            priceLineVisible: false,
-            lastValueVisible: true,
-            ...seriesOptions
+            ...seriesOptions,
           } as SeriesOptionsMap['Line']);
           break;
         default:
           console.error('알 수 없는 시리즈 타입입니다:', seriesType);
       }
 
-      // 데이터 설정
       if (series && data.length > 0) {
         series.setData(data);
       }
 
-      // 차트에 맞게 타임스케일 조정
       chart.timeScale().fitContent();
 
-      // 창 크기 변경 시 차트 크기 조정 함수
       const handleResize = () => {
         if (containerRef.current) {
           chart.applyOptions({ width: containerRef.current.clientWidth });
         }
       };
 
-      // 창 크기 변경 이벤트 리스너 등록
       window.addEventListener('resize', handleResize);
 
-      // 컴포넌트 언마운트 시 정리 작업
       return () => {
-        window.removeEventListener('resize', handleResize);  // 이벤트 리스너 제거
-        chart.remove();  // 차트 제거
+        window.removeEventListener('resize', handleResize);
+        chart.remove();
       };
     }
-  }, [seriesType, data, seriesOptions, chartOptions, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]);
+  }, [
+    seriesType,
+    data,
+    seriesOptions,
+    chartOptions,
+    backgroundColor,
+    lineColor,
+    textColor,
+    areaTopColor,
+    areaBottomColor,
+  ]);
 
-  // 차트를 그릴 컨테이너 렌더링
   return (
     <div>
       <div className="mb-4 flex flex-col space-y-4">
-        {/* 차트 컨트롤 영역 */}
         <div className="flex flex-wrap items-center justify-between">
-          {/* 시간 범위 탭 */}
           <div className="flex overflow-x-auto pb-1 mb-2 w-full">
             <div className="inline-flex rounded-md shadow-sm" role="group">
               {timeRangeOptions.map((range) => (
@@ -264,8 +232,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               ))}
             </div>
           </div>
-
-          {/* 차트 타입 선택기 */}
           <div className="flex items-center space-x-2 w-full sm:w-auto">
             <label htmlFor="chart-type-select" className="text-sm font-medium text-gray-700 whitespace-nowrap">
               차트 타입:
