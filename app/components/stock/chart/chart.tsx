@@ -23,7 +23,7 @@ interface ChartColors {
 }
 
 // 시리즈 타입 정의
-type SeriesType = 'area' | 'bar' | 'baseline' | 'candlestick' | 'histogram' | 'line';
+export type SeriesType = 'area' | 'bar' | 'baseline' | 'candlestick' | 'histogram' | 'line';
 
 // 차트 컴포넌트 속성 인터페이스 정의
 interface ChartComponentProps {
@@ -32,7 +32,12 @@ interface ChartComponentProps {
   seriesOptions?: Record<string, any>;     // 시리즈별 옵션
   chartOptions?: Record<string, any>;      // 차트 전체 옵션
   colors?: ChartColors;                    // 차트 색상 설정 (선택적)
+  onSeriesTypeChange?: (type: SeriesType) => void; // 시리즈 타입 변경 핸들러
+  onTimeRangeChange?: (range: string) => void; // 시간 범위 변경 핸들러
 }
+
+// 시간 범위 옵션
+const timeRangeOptions = ['1시간', '6시간', '1일', '1주일', '1개월'];
 
 // 차트 컴포넌트 정의
 export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
@@ -43,7 +48,12 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     seriesOptions = {},
     chartOptions = {},
     colors = {},
+    onSeriesTypeChange,
+    onTimeRangeChange,
   } = props;
+
+  // 선택된 시간 범위 상태
+  const [selectedTimeRange, setSelectedTimeRange] = React.useState('1일');
 
   const {
     backgroundColor = 'white',                        // 기본 배경색: 흰색
@@ -55,6 +65,22 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
 
   // 차트를 그릴 DOM 요소에 대한 참조 생성
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // 시리즈 타입 변경 핸들러
+  const handleSeriesTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newType = e.target.value as SeriesType;
+    if (onSeriesTypeChange) {
+      onSeriesTypeChange(newType);
+    }
+  };
+
+  // 시간 범위 변경 핸들러
+  const handleTimeRangeChange = (range: string) => {
+    setSelectedTimeRange(range);
+    if (onTimeRangeChange) {
+      onTimeRangeChange(range);
+    }
+  };
 
   // 컴포넌트 마운트 및 업데이트 시 차트 생성 및 관리
   useEffect(() => {
@@ -210,7 +236,59 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
   }, [seriesType, data, seriesOptions, chartOptions, backgroundColor, lineColor, textColor, areaTopColor, areaBottomColor]);
 
   // 차트를 그릴 컨테이너 렌더링
-  return <div ref={containerRef} style={{ width: '100%', height: '400px' }} />;
+  return (
+    <div>
+      <div className="mb-4 flex flex-col space-y-4">
+        {/* 차트 컨트롤 영역 */}
+        <div className="flex flex-wrap items-center justify-between">
+          {/* 시간 범위 탭 */}
+          <div className="flex overflow-x-auto pb-1 mb-2 w-full">
+            <div className="inline-flex rounded-md shadow-sm" role="group">
+              {timeRangeOptions.map((range) => (
+                <button
+                  key={range}
+                  type="button"
+                  onClick={() => handleTimeRangeChange(range)}
+                  className={`px-4 py-2 text-sm font-medium border ${
+                    selectedTimeRange === range
+                      ? 'bg-blue-600 text-white border-blue-600 z-10'
+                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                  } ${
+                    range === timeRangeOptions[0] ? 'rounded-l-md' : ''
+                  } ${
+                    range === timeRangeOptions[timeRangeOptions.length - 1] ? 'rounded-r-md' : ''
+                  }`}
+                >
+                  {range}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 차트 타입 선택기 */}
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
+            <label htmlFor="chart-type-select" className="text-sm font-medium text-gray-700 whitespace-nowrap">
+              차트 타입:
+            </label>
+            <select
+              id="chart-type-select"
+              value={seriesType}
+              onChange={handleSeriesTypeChange}
+              className="block w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+            >
+              <option value="area">Area</option>
+              <option value="bar">Bar</option>
+              <option value="baseline">Baseline</option>
+              <option value="candlestick">캔들스틱</option>
+              <option value="histogram">히스토그램</option>
+              <option value="line">라인</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div ref={containerRef} style={{ width: '100%', height: '400px' }} />
+    </div>
+  );
 };
 
 export default ChartComponent;
