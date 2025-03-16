@@ -123,12 +123,9 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     }, 50)
   }
 
-  // 폰트 로딩 확인
   useEffect(() => {
-    // CSS 변수 설정 (전역 방식)
     document.documentElement.style.setProperty('--chart-font-family', 'Pretendard, -apple-system, sans-serif');
     
-    // 폰트 로딩 확인
     if ('fonts' in document) {
       Promise.all([
         document.fonts.load('1em Pretendard'),
@@ -136,15 +133,12 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       ]).then(() => {
         setFontLoaded(true);
       }).catch(() => {
-        // 폰트 로딩에 실패하더라도 차트는 표시해야 함
         setFontLoaded(true);
       });
     } else {
-      // fonts API를 지원하지 않는 브라우저
       setFontLoaded(true);
     }
     
-    // 폰트 관련 스타일 추가
     const style = document.createElement('style');
     style.textContent = `
       .chart-container canvas {
@@ -159,7 +153,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
   }, []);
 
   useLayoutEffect(() => {
-    // 폰트 로딩을 기다린 후 차트 초기화
     if (!fontLoaded || !containerRef.current || !chartRef.current) return;
     
     const defaultChartOptions = {
@@ -167,6 +160,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         background: { type: ColorType.Solid, color: backgroundColor },
         textColor: "#2962FF",
         fontFamily: "Pretendard, -apple-system, system-ui, sans-serif",
+        fontSize: 14,
       },
       width: containerRef.current.clientWidth,
       height: containerRef.current.clientHeight,
@@ -191,7 +185,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           labelVisible: true,
           labelBackgroundColor: "#2962FF",
           labelTextColor: "white",
-          labelFontSize: 16,
+          labelFontSize: 14,
         },
         horzLine: {
           color: "#555555",
@@ -199,6 +193,9 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           style: 2,
           visible: true,
           labelVisible: true,
+          labelBackgroundColor: "#2962FF", 
+          labelTextColor: "white",
+          labelFontSize: 14,
         },
       },
       timeScale: {
@@ -363,13 +360,19 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       });
     }
 
-    // 차트 생성 후 추가 폰트 스타일 적용 시도
     setTimeout(() => {
       if (chartInstance.current) {
         chartInstance.current.applyOptions({
           layout: {
             fontFamily: "Pretendard, -apple-system, system-ui, sans-serif",
-          }
+            fontSize: 14,
+          },
+          timeScale: {
+            fontSize: 15
+          } as any,
+          rightPriceScale: {
+            fontSize: 14
+          } as any,
         });
       }
     }, 100);
@@ -395,7 +398,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     areaBottomColor,
   ])
 
-  // 데이터 업데이트 시 초기 로드 상태 관리
   useEffect(() => {
     if (data.length > 0) {
       setIsInitialLoad(true)
