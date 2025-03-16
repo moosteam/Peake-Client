@@ -130,24 +130,11 @@ export default function Home() {
                 background: { type: "solid", color: "white" },
                 textColor: "black",
               },
-              crosshair: {
-                mode: 1,
-                vertLine: {
-                  visible: true,
-                  width: 2,
-                  color: "rgba(21, 101, 192, 0.8)",
-                  style: 1,
-                },
-                horzLine: {
-                  visible: true,
-                  width: 2,
-                  color: "rgba(21, 101, 192, 0.8)",
-                  style: 1,
-                },
-              },
               grid: {
                 vertLines: {
                   color: "rgba(197, 203, 206, 0.5)",
+                  style: 1,
+                  visible: true,
                 },
                 horzLines: {
                   color: "rgba(197, 203, 206, 0.5)",

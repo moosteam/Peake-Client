@@ -1,17 +1,19 @@
 "use client"
 
-import React, { useEffect, useRef, useState, useLayoutEffect } from "react"
+import type React from "react"
+import { useEffect, useRef, useState, useLayoutEffect } from "react"
 import {
   createChart,
-  AreaSeries,
-  BarSeries,
-  BaselineSeries,
-  CandlestickSeries,
-  HistogramSeries,
-  LineSeries,
   ColorType,
   type IChartApi,
+  CandlestickSeries,
+  HistogramSeries,
+  AreaSeries,
+  LineSeries,
+  BaselineSeries,
   type SeriesOptionsMap,
+  DeepPartial,
+  TimeChartOptions,
 } from "lightweight-charts"
 
 interface ChartColors {
@@ -22,7 +24,7 @@ interface ChartColors {
   areaBottomColor?: string
 }
 
-export type SeriesType = "area" | "bar" | "bar2" | "baseline" | "candlestick" | "histogram" | "line"
+export type SeriesType = "area" | "baseline" | "candlestick" | "histogram" | "line"
 
 interface ChartComponentProps {
   seriesType?: SeriesType
@@ -50,8 +52,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
   const [selectedTimeRange, setSelectedTimeRange] = useState("1일")
   const [zoomLevel, setZoomLevel] = useState(0.8)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
-  const fixedSplitRatio = 0.5
-  const volumeHeightRatio = 0.12
 
   const {
     backgroundColor = "white",
@@ -115,10 +115,10 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       if (visibleRange !== null) {
         const rangeSize = visibleRange.to - visibleRange.from
         const middlePoint = (visibleRange.from + visibleRange.to) / 2
-        const newRange = { from: middlePoint - rangeSize * 0.6, to: middlePoint + rangeSize * 0.6 }
+        const newRange = { from: middlePoint - rangeSize * 0.5, to: middlePoint + rangeSize * 0.5 }
         timeScale.setVisibleLogicalRange(newRange)
       }
-      setZoomLevel(0.8)
+      setZoomLevel(0.7)
     }, 50)
   }
 
@@ -128,28 +128,77 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       layout: { background: { type: ColorType.Solid, color: backgroundColor }, textColor },
       width: containerRef.current.clientWidth,
       height: containerRef.current.clientHeight,
-      grid: { vertLines: { color: "transparent" }, horzLines: { color: "rgba(197, 203, 206, 0.2)" } },
+      grid: {
+        vertLines: {
+          color: "rgba(197, 203, 206, 0.5)",
+          style: 1,
+          visible: true,
+        },
+        horzLines: {
+          color: "rgba(197, 203, 206, 0.5)",
+          visible: true, // 수평선이 보이도록 설정
+        },
+      },
+      crosshair: {
+        mode: 0, // 0은 자유롭게 움직이는 모드, 1은 데이터 포인트에 스냅되는 모드
+        vertLine: {
+          color: "#555555", // 진한 회색
+          width: 1,
+          style: 2, // 점선 스타일
+          visible: true,
+          labelVisible: true,
+        },
+        horzLine: {
+          color: "#555555", // 진한 회색
+          width: 1,
+          style: 2, // 점선 스타일
+          visible: true,
+          labelVisible: true,
+        },
+      },
       timeScale: {
-        borderColor: "transparent",
+        borderColor: "#D1D4DC", // 테두리 색상 추가
         timeVisible: true,
         secondsVisible: false,
         fixLeftEdge: false,
         fixRightEdge: false,
-        minBarSpacing: 0.5,
+        minBarSpacing: 6,
         rightOffset: 5,
         barSpacing: 6,
         rightBarStaysOnScroll: false,
+        borderVisible: true, // 테두리 표시
       },
       rightPriceScale: {
-        borderColor: "transparent",
-        scaleMargins: { top: 0.02, bottom: 1 - fixedSplitRatio + 0.02 },
+        borderColor: "#D1D4DC", // 테두리 색상 추가
+        scaleMargins: { top: 0.02, bottom: 0.02 }, // 볼륨 차트 제거로 인한 마진 조정
         entireTextOnly: true,
+        borderVisible: true, // 테두리 표시
       },
       ...chartOptions,
     }
 
-    chartInstance.current = createChart(chartRef.current, defaultChartOptions)
-    const commonSeriesOptions = { priceLineVisible: false, lastValueVisible: true }
+    chartInstance.current = createChart(chartRef.current, defaultChartOptions as DeepPartial<TimeChartOptions>)
+    
+    // 차트 크기에 맞게 그리드 조정
+    chartInstance.current.applyOptions({
+      grid: {
+        vertLines: {
+          color: "rgba(197, 203, 206, 0.5)",
+          style: 1,
+          visible: true,
+        },
+        horzLines: {
+          color: "rgba(197, 203, 206, 0.5)",
+          visible: true,
+        },
+      },
+    });
+    
+    const commonSeriesOptions = {
+      priceLineVisible: false,
+      lastValueVisible: false, // 마지막 값 표시 제거 (빨간 점선 제거)
+    }
+
     let mainSeries
     switch (seriesType) {
       case "candlestick":
@@ -174,22 +223,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           lineWidth: 2,
           ...seriesOptions,
         } as SeriesOptionsMap["Area"])
-        break
-      case "bar":
-        mainSeries = chartInstance.current.addSeries(BarSeries, {
-          ...commonSeriesOptions,
-          upColor: "#E23C3C",
-          downColor: "#3C82E2",
-          ...seriesOptions,
-        } as SeriesOptionsMap["Bar"])
-        break
-      case "bar2":
-        mainSeries = chartInstance.current.addSeries(BarSeries, {
-          ...commonSeriesOptions,
-          upColor: "#4CAF50",
-          downColor: "#9C27B0",
-          ...seriesOptions,
-        } as SeriesOptionsMap["Bar"])
         break
       case "baseline":
         mainSeries = chartInstance.current.addSeries(BaselineSeries, {
@@ -218,7 +251,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           ...commonSeriesOptions,
           color: lineColor,
           lineWidth: 2,
-          crosshairMarkerVisible: true,
+          crosshairMarkerVisible: false, // 크로스헤어 마커 제거
           ...seriesOptions,
         } as SeriesOptionsMap["Line"])
         break
@@ -226,63 +259,53 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         console.error("알 수 없는 시리즈 타입입니다:", seriesType)
     }
 
-    const volumeSeries = chartInstance.current.addSeries(HistogramSeries, {
-      priceFormat: {
-        type: "volume",
-        formatter: (value: number) => {
-          if (value >= 1000000) {
-            return (value / 1000000).toFixed(2) + "M"
-          } else if (value >= 1000) {
-            return (value / 1000).toFixed(2) + "K"
-          }
-          return value.toFixed(0)
-        },
-      },
-      priceScaleId: "volume",
-      base: 0,
-    } as unknown as SeriesOptionsMap["Histogram"])
-
-    chartInstance.current.priceScale("volume").applyOptions({
-      scaleMargins: { top: 1 - volumeHeightRatio, bottom: 0 },
-      borderVisible: false,
-      entireTextOnly: true,
-      mode: 1,
-      textColor: "rgba(120, 123, 134, 0.8)",
-    })
-
     if (mainSeries && data.length > 0) {
-      mainSeries.setData(data)
-    }
-
-    if (volumeSeries && data.length > 0) {
-      const volumeData = data.map((item: any) => ({
-        time: item.time,
-        value: item.value,
-        color: item.close >= item.open ? "#E23C3C" : "#3C82E2",
-      }))
-      volumeSeries.setData(volumeData)
+      if (seriesType === "candlestick") {
+        mainSeries.setData(data)
+      } else {
+        mainSeries.setData(data)
+      }
     }
 
     if (data.length > 0) {
       const timeScale = chartInstance.current.timeScale()
       timeScale.fitContent()
-      const visibleRange = timeScale.getVisibleLogicalRange()
-      if (visibleRange !== null) {
-        const rangeSize = visibleRange.to - visibleRange.from
-        const middlePoint = (visibleRange.from + visibleRange.to) / 2
-        const newRangeSize = rangeSize * 0.8
-        timeScale.setVisibleLogicalRange({
-          from: middlePoint - newRangeSize / 2,
-          to: middlePoint + newRangeSize / 2,
-        })
-        setIsInitialLoad(false)
-      }
+
+      // 초기 줌 레벨 조정
+      setTimeout(() => {
+        if (!chartInstance.current) return
+        const timeScale = chartInstance.current.timeScale()
+        const visibleRange = timeScale.getVisibleLogicalRange()
+        if (visibleRange !== null) {
+          const rangeSize = visibleRange.to - visibleRange.from
+          const middlePoint = (visibleRange.from + visibleRange.to) / 2
+          // 줌 레벨 조정
+          const newRangeSize = rangeSize * 1.5
+          timeScale.setVisibleLogicalRange({
+            from: middlePoint - newRangeSize / 2,
+            to: middlePoint + newRangeSize / 2,
+          })
+          setIsInitialLoad(false)
+        }
+      }, 50)
     }
 
     const handleResize = () => {
       if (!containerRef.current || !chartInstance.current) return
       const width = containerRef.current.clientWidth
       chartInstance.current.applyOptions({ width })
+      
+      // 리사이즈 시 그리드 선 다시 조정
+      chartInstance.current.applyOptions({
+        grid: {
+          vertLines: {
+            visible: true,
+          },
+          horzLines: {
+            visible: true,
+          },
+        },
+      });
     }
 
     window.addEventListener("resize", handleResize)
@@ -346,8 +369,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               className="block w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
             >
               <option value="area">Area</option>
-              <option value="bar">Bar</option>
-              <option value="bar2">막대2</option>
               <option value="baseline">Baseline</option>
               <option value="candlestick">캔들스틱</option>
               <option value="histogram">히스토그램</option>
@@ -362,7 +383,17 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition-colors"
               title="확대"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 <line x1="11" y1="8" x2="11" y2="14"></line>
@@ -374,7 +405,17 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition-colors"
               title="축소"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 <line x1="8" y1="11" x2="14" y2="11"></line>
@@ -385,7 +426,17 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition-colors"
               title="원래 크기로"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M21 12a9 9 0 0 0-9-9 9 9 0 0 0-9 9 9 9 0 0 0 9 9 9 9 0 0 0 9-9z"></path>
                 <path d="M12 7v5l3 3"></path>
               </svg>
@@ -399,5 +450,3 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     </div>
   )
 }
-
-export default ChartComponent
