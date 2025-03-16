@@ -405,7 +405,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
   }, [data])
 
   return (
-    <div>
+    <div style={{ marginTop: "-120px" }}>
       <div className="mb-4 flex flex-col space-y-4">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex overflow-x-auto pb-1 mb-2 w-full">
@@ -463,6 +463,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="text-gray-800"
               >
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -485,6 +486,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="text-gray-800"
               >
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -506,6 +508,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="text-gray-800"
               >
                 <path d="M21 12a9 9 0 0 0-9-9 9 9 0 0 0-9 9 9 9 0 0 0 9 9 9 9 0 0 0 9-9z"></path>
                 <path d="M12 7v5l3 3"></path>
@@ -517,7 +520,12 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       <div 
         ref={containerRef} 
         className="relative chart-container" 
-        style={{ width: "100%", height: "600px" }}
+        style={{ 
+          width: "100%", 
+          height: "600px",
+          maxWidth: "calc(100vw - 48px)", 
+          margin: "0 auto"
+        }}
       >
         <div 
           ref={chartRef} 
