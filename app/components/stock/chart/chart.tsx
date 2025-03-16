@@ -52,6 +52,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
   const [selectedTimeRange, setSelectedTimeRange] = useState("1일")
   const [zoomLevel, setZoomLevel] = useState(0.8)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [fontLoaded, setFontLoaded] = useState(false)
 
   const {
     backgroundColor = "white",
@@ -122,10 +123,51 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     }, 50)
   }
 
+  // 폰트 로딩 확인
+  useEffect(() => {
+    // CSS 변수 설정 (전역 방식)
+    document.documentElement.style.setProperty('--chart-font-family', 'Pretendard, -apple-system, sans-serif');
+    
+    // 폰트 로딩 확인
+    if ('fonts' in document) {
+      Promise.all([
+        document.fonts.load('1em Pretendard'),
+        document.fonts.load('bold 1em Pretendard')
+      ]).then(() => {
+        setFontLoaded(true);
+      }).catch(() => {
+        // 폰트 로딩에 실패하더라도 차트는 표시해야 함
+        setFontLoaded(true);
+      });
+    } else {
+      // fonts API를 지원하지 않는 브라우저
+      setFontLoaded(true);
+    }
+    
+    // 폰트 관련 스타일 추가
+    const style = document.createElement('style');
+    style.textContent = `
+      .chart-container canvas {
+        font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   useLayoutEffect(() => {
-    if (!containerRef.current || !chartRef.current) return
+    // 폰트 로딩을 기다린 후 차트 초기화
+    if (!fontLoaded || !containerRef.current || !chartRef.current) return;
+    
     const defaultChartOptions = {
-      layout: { background: { type: ColorType.Solid, color: backgroundColor }, textColor },
+      layout: {
+        background: { type: ColorType.Solid, color: backgroundColor },
+        textColor: "#2962FF",
+        fontFamily: "Pretendard, -apple-system, system-ui, sans-serif",
+      },
       width: containerRef.current.clientWidth,
       height: containerRef.current.clientHeight,
       grid: {
@@ -136,28 +178,31 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         },
         horzLines: {
           color: "rgba(197, 203, 206, 0.5)",
-          visible: true, // 수평선이 보이도록 설정
+          visible: true,
         },
       },
       crosshair: {
-        mode: 0, // 0은 자유롭게 움직이는 모드, 1은 데이터 포인트에 스냅되는 모드
+        mode: 0,
         vertLine: {
-          color: "#555555", // 진한 회색
+          color: "#555555",
           width: 1,
-          style: 2, // 점선 스타일
+          style: 2,
           visible: true,
           labelVisible: true,
+          labelBackgroundColor: "#2962FF",
+          labelTextColor: "white",
+          labelFontSize: 16,
         },
         horzLine: {
-          color: "#555555", // 진한 회색
+          color: "#555555",
           width: 1,
-          style: 2, // 점선 스타일
+          style: 2,
           visible: true,
           labelVisible: true,
         },
       },
       timeScale: {
-        borderColor: "#D1D4DC", // 테두리 색상 추가
+        borderColor: "#D1D4DC",
         timeVisible: true,
         secondsVisible: false,
         fixLeftEdge: false,
@@ -166,20 +211,33 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         rightOffset: 5,
         barSpacing: 6,
         rightBarStaysOnScroll: false,
-        borderVisible: true, // 테두리 표시
+        borderVisible: true,
+        timeFormatter: (time: number) => {
+          const date = new Date(time * 1000);
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          
+          if (time % 86400 === 0) {
+            return `${year}-${month}-${day}`;
+          } else {
+            return `${year}-${month}-${day}  ${hours}:${minutes}`;
+          }
+        },
       },
       rightPriceScale: {
-        borderColor: "#D1D4DC", // 테두리 색상 추가
-        scaleMargins: { top: 0.02, bottom: 0.02 }, // 볼륨 차트 제거로 인한 마진 조정
+        borderColor: "#D1D4DC",
+        scaleMargins: { top: 0.02, bottom: 0.02 },
         entireTextOnly: true,
-        borderVisible: true, // 테두리 표시
+        borderVisible: true,
       },
       ...chartOptions,
     }
 
     chartInstance.current = createChart(chartRef.current, defaultChartOptions as DeepPartial<TimeChartOptions>)
     
-    // 차트 크기에 맞게 그리드 조정
     chartInstance.current.applyOptions({
       grid: {
         vertLines: {
@@ -196,7 +254,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     
     const commonSeriesOptions = {
       priceLineVisible: false,
-      lastValueVisible: false, // 마지막 값 표시 제거 (빨간 점선 제거)
+      lastValueVisible: false,
     }
 
     let mainSeries
@@ -251,10 +309,10 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           ...commonSeriesOptions,
           color: lineColor,
           lineWidth: 2,
-          crosshairMarkerVisible: false, // 크로스헤어 마커 제거
+          crosshairMarkerVisible: false,
           ...seriesOptions,
         } as SeriesOptionsMap["Line"])
-        break
+        
       default:
         console.error("알 수 없는 시리즈 타입입니다:", seriesType)
     }
@@ -271,7 +329,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       const timeScale = chartInstance.current.timeScale()
       timeScale.fitContent()
 
-      // 초기 줌 레벨 조정
       setTimeout(() => {
         if (!chartInstance.current) return
         const timeScale = chartInstance.current.timeScale()
@@ -279,7 +336,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         if (visibleRange !== null) {
           const rangeSize = visibleRange.to - visibleRange.from
           const middlePoint = (visibleRange.from + visibleRange.to) / 2
-          // 줌 레벨 조정
           const newRangeSize = rangeSize * 1.5
           timeScale.setVisibleLogicalRange({
             from: middlePoint - newRangeSize / 2,
@@ -295,7 +351,6 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       const width = containerRef.current.clientWidth
       chartInstance.current.applyOptions({ width })
       
-      // 리사이즈 시 그리드 선 다시 조정
       chartInstance.current.applyOptions({
         grid: {
           vertLines: {
@@ -308,6 +363,17 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       });
     }
 
+    // 차트 생성 후 추가 폰트 스타일 적용 시도
+    setTimeout(() => {
+      if (chartInstance.current) {
+        chartInstance.current.applyOptions({
+          layout: {
+            fontFamily: "Pretendard, -apple-system, system-ui, sans-serif",
+          }
+        });
+      }
+    }, 100);
+
     window.addEventListener("resize", handleResize)
     return () => {
       window.removeEventListener("resize", handleResize)
@@ -317,6 +383,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
       }
     }
   }, [
+    fontLoaded,
     seriesType,
     data,
     seriesOptions,
@@ -328,6 +395,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
     areaBottomColor,
   ])
 
+  // 데이터 업데이트 시 초기 로드 상태 관리
   useEffect(() => {
     if (data.length > 0) {
       setIsInitialLoad(true)
@@ -444,8 +512,16 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
           </div>
         </div>
       </div>
-      <div ref={containerRef} className="relative" style={{ width: "100%", height: "600px" }}>
-        <div ref={chartRef} className="w-full h-full" />
+      <div 
+        ref={containerRef} 
+        className="relative chart-container" 
+        style={{ width: "100%", height: "600px" }}
+      >
+        <div 
+          ref={chartRef} 
+          className="w-full h-full" 
+          style={{ fontFamily: "Pretendard, -apple-system, system-ui, sans-serif" }}
+        />
       </div>
     </div>
   )
