@@ -149,7 +149,7 @@
 //         font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
 //       }
 //     `;
-//     document.head.appendChild(style);
+//     document.head.appendChild(style)a
     
 //     return () => {
 //       document.head.removeChild(style);
