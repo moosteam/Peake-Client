@@ -229,6 +229,14 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         scaleMargins: { top: 0.02, bottom: 0.02 },
         entireTextOnly: true,
         borderVisible: true,
+        priceFormat: {
+          type: 'price',
+          precision: 0,
+          minMove: 1,
+          formatter: (price: number) => {
+            return price.toLocaleString('ko-KR');
+          }
+        },
       },
       ...chartOptions,
     }
@@ -333,7 +341,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         if (visibleRange !== null) {
           const rangeSize = visibleRange.to - visibleRange.from
           const middlePoint = (visibleRange.from + visibleRange.to) / 2
-          const newRangeSize = rangeSize * 1.2
+          const newRangeSize = rangeSize * 1.1
           timeScale.setVisibleLogicalRange({
             from: middlePoint - newRangeSize / 2,
             to: middlePoint + newRangeSize / 2,
@@ -405,9 +413,10 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
   }, [data])
 
   return (
-    <div style={{ marginTop: "-120px" }}>
+    <div style={{ marginTop: "-40px" }}>
       <div className="mb-4 flex flex-col space-y-4">
         <div className="flex flex-wrap items-center justify-between">
+          {/* 시간 범위 선택 버튼
           <div className="flex overflow-x-auto pb-1 mb-2 w-full">
             <div className="inline-flex rounded-md shadow-sm" role="group">
               {timeRangeOptions.map((range) => (
@@ -428,6 +437,8 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               ))}
             </div>
           </div>
+          */}
+          {/* 차트 타입 선택
           <div className="flex items-center space-x-2 w-full sm:w-auto">
             <label htmlFor="chart-type-select" className="text-sm font-medium text-gray-700 whitespace-nowrap">
               차트 타입:
@@ -445,6 +456,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
               <option value="line">라인</option>
             </select>
           </div>
+          */}
         </div>
         <div className="flex items-center justify-end space-x-2">
           <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">

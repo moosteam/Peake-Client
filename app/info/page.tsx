@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ChartComponent } from "../components/stock/chart/chart"
-import type { SeriesType } from "../components/stock/chart/chart"
+import { ChartComponent } from "../components/chart/chart/chart"
+import type { SeriesType } from "../components/chart/chart/chart"
 
 export default function Home() {
   const [chartType, setChartType] = useState<SeriesType>("candlestick")
