@@ -333,7 +333,7 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         if (visibleRange !== null) {
           const rangeSize = visibleRange.to - visibleRange.from
           const middlePoint = (visibleRange.from + visibleRange.to) / 2
-          const newRangeSize = rangeSize * 1.5
+          const newRangeSize = rangeSize * 1.2
           timeScale.setVisibleLogicalRange({
             from: middlePoint - newRangeSize / 2,
             to: middlePoint + newRangeSize / 2,
@@ -521,8 +521,8 @@ export const ChartComponent: React.FC<ChartComponentProps> = (props) => {
         ref={containerRef} 
         className="relative chart-container" 
         style={{ 
-          width: "100%", 
-          height: "600px",
+          width: "70%",
+          height: "200px",
           maxWidth: "calc(100vw - 48px)", 
           margin: "0 auto"
         }}
