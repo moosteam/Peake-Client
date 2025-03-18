@@ -47,12 +47,45 @@ export default function Home() {
 
   const displayedDropdownOption = selectedTimeOption || "1분"
   const isMinuteActive = selectedTimeOption !== "" && selectedPeriodOption === null
+
   const marqueeItems = [
-    { category: "급상승 채널", channels: ["BJ 철구", "쯔양", "뜬뜬", "소통왕"] },
-    { category: "급하락 채널", channels: ["악동김블루", "침착맨", "릴파", "풍월량"] },
-    { category: "카테고리별 인기도", channels: ["먹방: 밥굽남", "게임: 우왁굳", "일상: 이사배", "토크: 주호민"] },
-    { category: "최고 거래량 채널", channels: ["짤태수", "김도", "피지컬갤러리", "오킹"] },
-    { category: "최고 좋아요 채널", channels: ["재열이형", "랄로", "핫띠", "김성회"] }
+    { 
+      category: "급상승 채널", 
+      channels: [
+        { name: "BJ 철구", change: "+8.0% (+4000원)" },
+        { name: "쯔양", change: "+6.2% (+2800원)" }
+      ],
+      direction: "up" 
+    },
+    { 
+      category: "급하락 채널", 
+      channels: [
+        { name: "악동김블루", change: "-8.9% (-1000원)" },
+        { name: "침착맨", change: "-5.4% (-700원)" }
+      ],
+      direction: "down" 
+    },
+    { 
+      category: "인기 카테고리", 
+      channels: [{ name: "먹방", change: "" }],
+      direction: "neutral" 
+    },
+    { 
+      category: "인기 거래 채널", 
+      channels: [
+        { name: "짤태수", change: "+6.5% (+2500원)" },
+        { name: "김도", change: "+5.1% (+1800원)" }
+      ],
+      direction: "up" 
+    },
+    { 
+      category: "최고 인기 채널", 
+      channels: [
+        { name: "재열이형", change: "+5.2% (+3200원)" },
+        { name: "랄로", change: "+7.8% (+3500원)" }
+      ],
+      direction: "up" 
+    }
   ]
   
   useEffect(() => {
@@ -60,8 +93,7 @@ export default function Home() {
 
     const marqueeContent = marqueeRef.current;
     const marqueeWidth = marqueeContent.scrollWidth / 3;
-    
-    marqueeContent.style.animationDuration = `${marqueeWidth / 150}s`;
+    marqueeContent.style.animationDuration = `${marqueeWidth / 60}s`; 
     
     return () => {
       if (marqueeContent) {
@@ -168,7 +200,7 @@ export default function Home() {
       <style jsx>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); } /* Move by 1/3 since we have 3 copies */
+          100% { transform: translateX(-33.33%); }
         }
         .marquee-content {
           display: inline-block;
@@ -178,7 +210,7 @@ export default function Home() {
         }
       `}</style>
       
-      <div className="fixed bottom-0 left-0 right-0 bg-blue-50 py-4 overflow-hidden border-t border-blue-100">
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-100 py-4 overflow-hidden border-t border-gray-100">
         <div className="marquee-container overflow-hidden">
           <div 
             ref={marqueeRef}
@@ -191,15 +223,20 @@ export default function Home() {
                     key={`${i}-${index}`} 
                     className="mx-16 text-base"
                   >
-                    <span className="text-blue-700 font-semibold">{item.category}:</span>
+                    <span className={`font-medium ${item.direction === "down" ? 'text-blue-500' : 'text-red-500'}`}>
+                      {item.category}:
+                    </span>
                     {item.channels.map((channel, channelIndex) => (
-                      <span key={channelIndex} className="text-gray-700 ml-2">
-                        {channel}{channelIndex < item.channels.length - 1 ? ',' : ''}
+                      <span key={channelIndex} className="ml-2 font-light">
+                        <span className="text-gray-700">{channel.name}</span>
+                        {channel.change && (
+                          <span className={`ml-1 ${item.direction === "down" ? 'text-blue-500' : 'text-red-500'}`}>
+                            {channel.change}
+                          </span>
+                        )}
+                        {channelIndex < item.channels.length - 1 ? ',' : ''}
                       </span>
                     ))}
-                    {index < marqueeItems.length - 1 && (
-                      <span className="text-blue-300 mx-4">|</span>
-                    )}
                   </span>
                 ))}
               </span>
