@@ -223,12 +223,16 @@ export default function Home() {
                     key={`${i}-${index}`} 
                     className="mx-16 text-base"
                   >
-                    <span className={`font-medium ${item.direction === "down" ? 'text-blue-500' : 'text-red-500'}`}>
+                    <span className={`font-medium ${
+                      item.category === "급상승 채널" || item.category === "급하락 채널" 
+                        ? (item.direction === "down" ? 'text-blue-500' : 'text-red-500') 
+                        : 'text-gray-900'
+                    }`}>
                       {item.category}:
                     </span>
                     {item.channels.map((channel, channelIndex) => (
                       <span key={channelIndex} className="ml-2 font-light">
-                        <span className="text-gray-700">{channel.name}</span>
+                        <span className="text-black">{channel.name}</span>
                         {channel.change && (
                           <span className={`ml-1 ${item.direction === "down" ? 'text-blue-500' : 'text-red-500'}`}>
                             {channel.change}
