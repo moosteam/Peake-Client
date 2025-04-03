@@ -1,21 +1,22 @@
 'use client';
+import { useState } from 'react';
 import Sidebar from '../sidebar/sidebar';
-import '../globals.css'; // Make sure to import the global CSS
+import SearchBar from '../searchbar/searchbar';
+import Stock from '../Stock/Stock'; 
 
-export default function RankingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Home() {
+  const [searchTime, setSearchTime] = useState('');
+
   return (
     <div className="flex min-h-screen bg-[#FFFFFF]">
       <Sidebar />
+
       <div className="flex-1 pl-[250px] pt-8">
         <div className="bg-white rounded-lg w-[95%] max-w-[1200px] 2xl:max-w-[1600px] min-h-[94vh] mx-auto p-6 mt-[-8]">
-          {children}
+          {/* <SearchBar searchTime={searchTime} setSearchTime={setSearchTime} /> */}
+          <Stock />
         </div>
       </div>
     </div>
   );
 }
-

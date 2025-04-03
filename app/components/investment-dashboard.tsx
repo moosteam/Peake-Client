@@ -11,6 +11,20 @@ interface PortfolioItem {
   percentage: number
 }
 
+const weekTitle = (
+    <div className="flex items-center">
+      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">
+        투자 내역
+      </h1>
+    </div>
+  );
+  
+const subTitle = (
+    <h2 className="text-gray-700 text-[15px] mb-4 max-w-full break-words">
+    실시간 유튜버 구독자 순위에요
+    </h2>
+);
+
 const InvestmentDashboard = () => {
   // 포트폴리오 데이터
   const portfolioData: PortfolioItem[] = [
@@ -34,7 +48,8 @@ const InvestmentDashboard = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-8 text-black">투자내역</h1>
+      {weekTitle}
+      {subTitle}
 
       {/* 상단 정보 섹션 */}
       <div className="flex flex-col md:flex-row justify-between mb-10">

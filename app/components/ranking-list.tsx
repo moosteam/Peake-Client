@@ -14,6 +14,21 @@ interface RankingItem {
   amount: number
 }
 
+const weekTitle = (
+    <div className="flex items-center">
+      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">
+        유튜버 랭킹
+      </h1>
+    </div>
+  );
+  
+const subTitle = (
+    <h2 className="text-gray-700 text-[15px] mb-4 max-w-full break-words">
+    실시간 유튜버 구독자 순위에요
+    </h2>
+);
+
+
 // 필터 타입 정의
 type FilterType = "subscribers" | "donations" | "holders"
 
@@ -70,44 +85,48 @@ const RankingList = () => {
     setActiveFilter(filter)
   }
 
-  return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-center text-black mb-8">랭킹</h1>
+  const weekTitle = (
+    <div className="flex items-center mb-2">
+      <h1 className="text-black text-2xl font-semibold">유튜버 랭킹</h1>
+    </div>
+  );
+  
+  const subTitle = (
+    <h2 className="text-gray-700 text-base mb-6">
+      실시간 유튜버 구독자 순위에요
+    </h2>
+  );
 
-      {/* 필터 버튼 */}
-      <div className="flex flex-row justify-center gap-2 mb-6">
-        <button
-          className={`px-4 py-2 rounded-full text-sm ${
-            activeFilter === "subscribers" ? "bg-gray-300 text-gray-700" : "bg-gray-200 text-gray-500 hover:bg-gray-250"
-          }`}
-          onClick={() => handleFilterChange("subscribers")}
-        >
-          구독자 순
-        </button>
-        <button
-          className={`px-4 py-2 rounded-full text-sm ${
-            activeFilter === "donations" ? "bg-gray-300 text-gray-700" : "bg-gray-200 text-gray-500 hover:bg-gray-250"
-          }`}
-          onClick={() => handleFilterChange("donations")}
-        >
-          후원 순
-        </button>
-        <button
-          className={`px-4 py-2 rounded-full text-sm ${
-            activeFilter === "holders" ? "bg-gray-300 text-gray-700" : "bg-gray-200 text-gray-500 hover:bg-gray-250"
-          }`}
-          onClick={() => handleFilterChange("holders")}
-        >
-          보유자 순
-        </button>
+  return (
+    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
+      {weekTitle}
+      {subTitle}
+      
+      {/* Updated Filter Buttons */}
+      <div className="flex flex-wrap gap-3 mb-8">
+        {["subscribers", "donations", "holders"].map((filter) => (
+          <button
+            key={filter}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              activeFilter === filter 
+                ? 'bg-blue-100 text-blue-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            onClick={() => handleFilterChange(filter as FilterType)}
+          >
+            {filter === "subscribers" && "구독자 순"}
+            {filter === "donations" && "후원 순"}
+            {filter === "holders" && "보유자 순"}
+          </button>
+        ))}
       </div>
 
-      {/* 랭킹 리스트 */}
-      <div className="bg-gray-100 rounded-lg overflow-hidden">
-        {rankingData.map((item, index) => (
+      {/* Updated Ranking List */}
+      <div className="bg-white rounded-xl shadow-sm">
+        {rankingData.map((item) => (
           <div
             key={item.id}
-            className="flex flex-row items-center p-4 border-b border-gray-200 bg-white even:bg-gray-50 last:border-b-0"
+            className="grid grid-cols-[50px_100px_1fr_auto] items-center p-4 border-b last:border-b-0 hover:bg-gray-50"
           >
             {/* 순위 */}
             <div className="w-12 text-center font-bold text-2xl text-black">{item.id}</div>
@@ -139,7 +158,7 @@ const RankingList = () => {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export default RankingList

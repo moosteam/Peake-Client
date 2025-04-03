@@ -16,7 +16,7 @@ export default function Sidebar() {
   
   const recommendedItems = [
     { href: "/saved", label: "골라줘, AI", badge: true },
-    { href: "/portfolio", label: "나락 점수 계산기", badge: true },
+    { href: "/narak", label: "나락 점수 계산기", badge: true },
 
   ];
   

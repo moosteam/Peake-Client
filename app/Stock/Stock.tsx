@@ -29,19 +29,19 @@ export default function Stock() {
   });
 
   const weekTitle = (
-    <div className="flex items-center">
-      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">모든 주식 목록</h1>
+    <div className="flex items-center mb-2">
+      <h1 className="text-black text-2xl font-semibold">모든 주식 목록</h1>
     </div>
   );
   
   const subTitle = (
-    <h2 className="text-gray-700 text-[15px] mb-4">
-      대한민국 150만 이상 유튜브 채널에 대한 모든 주식 목록이에요.
+    <h2 className="text-gray-700 text-base mb-6">
+      각 종목별 보유 비중과 변동 내역까지 확인할 수 있어요
     </h2>
   );
 
   return (
-    <div className="mt-4">
+    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
       {weekTitle}
       {subTitle}
 
@@ -64,11 +64,13 @@ export default function Stock() {
         setAppliedMax={setAppliedMax}
       />
 
-      <List 
-        subscribers={subscribers}
-        displayedSubscribers={displayedSubscribers}
-        setSubscribers={setSubscribers}
-      />
+      <div className="overflow-x-auto">
+        <List 
+          subscribers={subscribers}
+          displayedSubscribers={displayedSubscribers}
+          setSubscribers={setSubscribers}
+        />
+      </div>
     </div>
   );
 }
