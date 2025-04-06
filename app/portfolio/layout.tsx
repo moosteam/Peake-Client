@@ -1,16 +1,45 @@
-import InvestmentDashboard from "../components/investment-dashboard"
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 import Sidebar from '../sidebar/sidebar';
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen bg-[#FFFFFF]">
-      <Sidebar />
-      <div className="flex-1 pl-[250px] pt-8">
-        <div className="bg-white rounded-lg w-[95%] max-w-[1200px] 2xl:max-w-[1600px] min-h-[94vh] mx-auto p-6 mt-[-8]">
-          <InvestmentDashboard />
-        </div>
-      </div>
-    </div>
-  )
-}
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+});
 
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+export const metadata: Metadata = {
+  title: 'Peake',
+  description: '모의 유튜버 채널 주식 투자 서비스',
+};
+
+export const viewport = {
+  themeColor: '#000000',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ko">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <div className="flex min-h-screen bg-[#FFFFFF]">
+          <Sidebar />
+          <div className="flex-1 pl-[250px] pt-8">
+            <div className="bg-white rounded-lg w-[95%] max-w-[1600px] min-h-[94vh] mx-auto p-6 mt-[-8px]"></div>
+            {children}
+          </div>
+        </div>
+      </body>
+    </html>
+  );
+}
