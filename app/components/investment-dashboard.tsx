@@ -47,7 +47,7 @@ const InvestmentDashboard = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto"> {/* 추가된 wrapper */}
       {weekTitle}
       {subTitle}
 
@@ -94,7 +94,7 @@ const InvestmentDashboard = () => {
       </div>
 
       {/* 포트폴리오 섹션 */}
-      <div className="mt-12">
+      <div className="mt-10"> {/* mt-12 → mt-10 */}
         <h2 className="text-xl font-bold mb-6 text-black">보유자산 포트폴리오</h2>
         <div className="flex flex-col md:flex-row">
           {/* 원 그래프 */}

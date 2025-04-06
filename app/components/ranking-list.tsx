@@ -98,12 +98,11 @@ const RankingList = () => {
   );
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
+    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto"> {/* px-4 → px-6 */}
       {weekTitle}
       {subTitle}
       
-      {/* Updated Filter Buttons */}
-      <div className="flex flex-wrap gap-3 mb-8">
+      <div className="flex flex-wrap gap-3 mb-8"> {/* mb-8 유지 */}
         {["subscribers", "donations", "holders"].map((filter) => (
           <button
             key={filter}
