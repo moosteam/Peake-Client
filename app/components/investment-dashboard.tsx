@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 import { formatNumber } from "../lib/utils"
+import SectionHeader from "./common/SectionHeader"
 
 // 포트폴리오 데이터 타입 정의
 interface PortfolioItem {
@@ -33,8 +34,11 @@ const InvestmentDashboard = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-8 text-black">투자내역</h1>
+    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto">
+      <SectionHeader 
+        title="투자 내역" 
+        subtitle="현재 내가 투자한 유튜버 목록이에요" 
+      />
 
       {/* 상단 정보 섹션 */}
       <div className="flex flex-col md:flex-row justify-between mb-10">
@@ -79,7 +83,7 @@ const InvestmentDashboard = () => {
       </div>
 
       {/* 포트폴리오 섹션 */}
-      <div className="mt-12">
+      <div className="mt-10"> {/* mt-12 → mt-10 */}
         <h2 className="text-xl font-bold mb-6 text-black">보유자산 포트폴리오</h2>
         <div className="flex flex-col md:flex-row">
           {/* 원 그래프 */}

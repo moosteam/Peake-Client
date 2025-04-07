@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import List, { Subscriber } from '../components/stock/list/list';
 import Category from '../components/stock/category/category';
+import SectionHeader from '../components/common/SectionHeader';
 
 export default function Stock() {
   const [selectedPeriod, setSelectedPeriod] = useState('실시간');
@@ -28,22 +29,13 @@ export default function Stock() {
     );
   });
 
-  const weekTitle = (
-    <div className="flex items-center">
-      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">모든 주식 목록</h1>
-    </div>
-  );
-  
-  const subTitle = (
-    <h2 className="text-gray-700 text-[15px] mb-4">
-      대한민국 150만 이상 유튜브 채널에 대한 모든 주식 목록이에요.
-    </h2>
-  );
 
   return (
-    <div className="mt-4">
-      {weekTitle}
-      {subTitle}
+    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
+      <SectionHeader 
+        title="모든 주식 목록" 
+        subtitle="상장된 모든 유튜버 목록이에요" 
+      />
 
       <Category 
         selectedCategory={selectedCategory}
@@ -64,11 +56,13 @@ export default function Stock() {
         setAppliedMax={setAppliedMax}
       />
 
-      <List 
-        subscribers={subscribers}
-        displayedSubscribers={displayedSubscribers}
-        setSubscribers={setSubscribers}
-      />
+      <div className="overflow-x-auto">
+        <List 
+          subscribers={subscribers}
+          displayedSubscribers={displayedSubscribers}
+          setSubscribers={setSubscribers}
+        />
+      </div>
     </div>
   );
 }
