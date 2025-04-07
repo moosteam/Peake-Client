@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 import { formatNumber } from "../lib/utils"
+import SectionHeader from "./common/SectionHeader"
 
 // 포트폴리오 데이터 타입 정의
 interface PortfolioItem {
@@ -10,20 +11,6 @@ interface PortfolioItem {
   color: string
   percentage: number
 }
-
-const weekTitle = (
-    <div className="flex items-center">
-      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">
-        투자 내역
-      </h1>
-    </div>
-  );
-  
-const subTitle = (
-    <h2 className="text-gray-700 text-[15px] mb-4 max-w-full break-words">
-    실시간 유튜버 구독자 순위에요
-    </h2>
-);
 
 const InvestmentDashboard = () => {
   // 포트폴리오 데이터
@@ -47,9 +34,11 @@ const InvestmentDashboard = () => {
   }
 
   return (
-    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto"> {/* 추가된 wrapper */}
-      {weekTitle}
-      {subTitle}
+    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto">
+      <SectionHeader 
+        title="투자 내역" 
+        subtitle="현재 내가 투자한 유튜버 목록이에요" 
+      />
 
       {/* 상단 정보 섹션 */}
       <div className="flex flex-col md:flex-row justify-between mb-10">

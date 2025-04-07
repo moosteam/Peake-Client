@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { formatNumber } from "../lib/utils"
+import SectionHeader from "./common/SectionHeader"
 
 // 랭킹 데이터 타입 정의
 interface RankingItem {
@@ -13,21 +14,6 @@ interface RankingItem {
   userId: string
   amount: number
 }
-
-const weekTitle = (
-    <div className="flex items-center">
-      <h1 className="text-black mt-[-12px] text-[22px] font-semibold">
-        유튜버 랭킹
-      </h1>
-    </div>
-  );
-  
-const subTitle = (
-    <h2 className="text-gray-700 text-[15px] mb-4 max-w-full break-words">
-    실시간 유튜버 구독자 순위에요
-    </h2>
-);
-
 
 // 필터 타입 정의
 type FilterType = "subscribers" | "donations" | "holders"
@@ -85,23 +71,12 @@ const RankingList = () => {
     setActiveFilter(filter)
   }
 
-  const weekTitle = (
-    <div className="flex items-center mb-2">
-      <h1 className="text-black text-2xl font-semibold">유튜버 랭킹</h1>
-    </div>
-  );
-  
-  const subTitle = (
-    <h2 className="text-gray-700 text-base mb-6">
-      실시간 유튜버 구독자 순위에요
-    </h2>
-  );
-
   return (
     <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto"> {/* px-4 → px-6 */}
-      {weekTitle}
-      {subTitle}
-      
+      <SectionHeader 
+        title="랭킹" 
+        subtitle="실시간 유튜버 구독자 순위에요" 
+      />
       <div className="flex flex-wrap gap-3 mb-8"> {/* mb-8 유지 */}
         {["subscribers", "donations", "holders"].map((filter) => (
           <button

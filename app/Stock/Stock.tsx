@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import List, { Subscriber } from '../components/stock/list/list';
 import Category from '../components/stock/category/category';
+import SectionHeader from '../components/common/SectionHeader';
 
 export default function Stock() {
   const [selectedPeriod, setSelectedPeriod] = useState('실시간');
@@ -28,22 +29,13 @@ export default function Stock() {
     );
   });
 
-  const weekTitle = (
-    <div className="flex items-center mb-2">
-      <h1 className="text-black text-2xl font-semibold">모든 주식 목록</h1>
-    </div>
-  );
-  
-  const subTitle = (
-    <h2 className="text-gray-700 text-base mb-6">
-      각 종목별 보유 비중과 변동 내역까지 확인할 수 있어요
-    </h2>
-  );
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
-      {weekTitle}
-      {subTitle}
+      <SectionHeader 
+        title="모든 주식 목록" 
+        subtitle="상장된 모든 유튜버 목록이에요" 
+      />
 
       <Category 
         selectedCategory={selectedCategory}

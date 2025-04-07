@@ -2,9 +2,5 @@
 import Stock from './Stock/Stock'; 
 
 export default function Home() {
-  return (
-    <>
-      <Stock />
-    </>
-  );
+  return <Stock />
 }
