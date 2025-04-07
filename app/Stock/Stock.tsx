@@ -31,7 +31,7 @@ export default function Stock() {
 
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
+    <>
       <SectionHeader 
         title="모든 주식 목록" 
         subtitle="상장된 모든 유튜버 목록이에요" 
@@ -63,6 +63,6 @@ export default function Stock() {
           setSubscribers={setSubscribers}
         />
       </div>
-    </div>
+    </>
   );
 }

@@ -34,7 +34,7 @@ const InvestmentDashboard = () => {
   }
 
   return (
-    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto">
+    <>
       <SectionHeader 
         title="투자 내역" 
         subtitle="현재 내가 투자한 유튜버 목록이에요" 
@@ -122,7 +122,7 @@ const InvestmentDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
