@@ -1,8 +1,8 @@
 "use client"
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
-import { formatNumber } from "../lib/utils"
-import SectionHeader from "@components/common/SectionHeader"
+import { formatNumber } from "../../lib/utils"
+import SectionHeader from "@components/common/sectionheader/SectionHeader"
 
 // 포트폴리오 데이터 타입 정의
 interface PortfolioItem {
