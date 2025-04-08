@@ -1,5 +1,5 @@
 'use client';
-import Stock from './watchlist/Stock'; 
+import Stock from '@app/watchlist/Stock'; 
 
 export default function Home() {
   return <Stock />

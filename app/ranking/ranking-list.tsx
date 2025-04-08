@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { formatNumber } from "../lib/utils"
-import SectionHeader from "./common/SectionHeader"
+import SectionHeader from "@components/common/SectionHeader"
 
 // 랭킹 데이터 타입 정의
 interface RankingItem {
