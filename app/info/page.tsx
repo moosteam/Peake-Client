@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import ChannelHeader from "../../components/channel/ChannelHeader"
-import TimelineControls from "../../components/channel/TimelineControls"
-import PriceStats from "../../components/channel/PriceStats"
-import TradePanel from "../../components/channel/TradePanel"
-import MarqueeNews from "../../components/channel/MarqueeNews"
-import { ChartComponent } from "../../components/chart/chart/chart"
-import type { SeriesType } from "../../components/chart/chart/chart"
-import OrderBook from "../../components/channel/OrderBook"
+import ChannelHeader from "@components/info/ChannelHeader"
+import TimelineControls from "@components/info/TimelineControls"
+import PriceStats from "@components/info/PriceStats"
+import TradePanel from "@components/info/TradePanel"
+import MarqueeNews from "@components/info/MarqueeNews"
+import { ChartComponent } from "@components/chart/chart/chart"
+import type { SeriesType } from "@components/chart/chart/chart"
+import OrderBook from "@components/info/OrderBook"
 
 export default function ChannelInfoPage() {
   const [selectedTimeOption, setSelectedTimeOption] = useState<string>("1시간")
