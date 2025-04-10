@@ -1,5 +1,5 @@
 'use client';
-import RankingList from "../components/ranking-list";
+import RankingList from "./ranking-list";
 
 export default function RankingPage() {
   return (

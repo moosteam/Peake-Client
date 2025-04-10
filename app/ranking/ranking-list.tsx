@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { formatNumber } from "../lib/utils"
-import SectionHeader from "./common/SectionHeader"
+import { formatNumber } from "../../lib/utils"
+import SectionHeader from "@components/common/sectionheader/SectionHeader"
 
 // 랭킹 데이터 타입 정의
 interface RankingItem {
@@ -72,7 +72,7 @@ const RankingList = () => {
   }
 
   return (
-    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto"> {/* px-4 → px-6 */}
+    <> 
       <SectionHeader 
         title="랭킹" 
         subtitle="실시간 유튜버 구독자 순위에요" 
@@ -131,7 +131,7 @@ const RankingList = () => {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }
 

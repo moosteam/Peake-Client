@@ -1,253 +1,237 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import Image from "next/image"
-// import { ChartComponent } from "../components/chart/chart/chart"
-// import type { SeriesType } from "../components/chart/chart/chart"
-import { candlestickData } from "../components/chart/data/data"
+import { useState, useEffect } from "react"
+import ChannelHeader from "@components/info/ChannelHeader"
+import TimelineControls from "@components/info/TimelineControls"
+import PriceStats from "@components/info/PriceStats"
+import TradePanel from "@components/info/TradePanel"
+import MarqueeNews from "@components/info/MarqueeNews"
+import { ChartComponent } from "@components/chart/chart/chart"
+import type { SeriesType } from "@components/chart/chart/chart"
+import OrderBook from "@components/info/OrderBook"
 
-export default function Home() {
-  // const [chartType, setChartType] = useState<SeriesType>("candlestick")
-  const [selectedTimeOption, setSelectedTimeOption] = useState<string>("1분")
-  const [timeDropdownOpen, setTimeDropdownOpen] = useState(false)
+export default function ChannelInfoPage() {
+  const [selectedTimeOption, setSelectedTimeOption] = useState<string>("1시간")
   const [selectedPeriodOption, setSelectedPeriodOption] = useState<string | null>(null)
-  const marqueeRef = useRef<HTMLDivElement>(null)
+  const [chartData, setChartData] = useState<any[]>([])
+  const [seriesType, setSeriesType] = useState<SeriesType>("candlestick")
+  
+  // Time options
+  const minuteOptions = ["1시간", "6시간", "1일", "1주일", "1달", "1년"]
+  const periodOptions = ["AI 차트 형식", "지표"]
 
-  const chartOptions = {
-    height: 600,
-    layout: {
-      background: { type: "solid", color: "white" },
-      textColor: "black",
-    },
-    grid: {
-      vertLines: {
-        color: "rgba(197, 203, 206, 0.5)",
-        style: 1,
-        visible: true,
-      },
-      horzLines: {
-        color: "rgba(197, 203, 206, 0.5)",
-      },
-    },
-  }
-
-  const minuteOptions = ["1분", "3분", "5분", "10분", "15분", "30분", "60분"]
-  const periodOptions = ["일", "주", "월", "년"]
+  // Handle time selection
   const handleTimeSelection = (option: string) => {
     if (minuteOptions.includes(option)) {
       setSelectedTimeOption(option)
       setSelectedPeriodOption(null)
-    } 
-    else if (periodOptions.includes(option)) {
+    } else if (periodOptions.includes(option)) {
       setSelectedPeriodOption(option)
       setSelectedTimeOption("")
     }
-    setTimeDropdownOpen(false)
   }
 
-  const displayedDropdownOption = selectedTimeOption || "1분"
-  const isMinuteActive = selectedTimeOption !== "" && selectedPeriodOption === null
+  // Generate mock chart data based on selected time option
+  useEffect(() => {
+    // Generate sample data for the chart
+    const generateData = () => {
+      const now = new Date()
+      const data = []
+      let timeStep: number
+      let dataPoints: number
+      
+      switch (selectedTimeOption) {
+        case "1시간":
+          timeStep = 60 // 1 minute intervals
+          dataPoints = 60
+          break
+        case "6시간":
+          timeStep = 360 // 6 minute intervals
+          dataPoints = 60
+          break
+        case "1일":
+          timeStep = 1440 // 24 minute intervals
+          dataPoints = 60
+          break
+        case "1주일":
+          timeStep = 10080 // 168 minute intervals (weekly)
+          dataPoints = 60
+          break
+        case "1달":
+          timeStep = 43200 // 720 minute intervals (monthly)
+          dataPoints = 60
+          break
+        case "1년":
+          timeStep = 525600 // 8760 minute intervals (yearly)
+          dataPoints = 60
+          break
+        default:
+          timeStep = 1440
+          dataPoints = 60
+      }
 
+      // Base value and volatility
+      let baseValue = 20000
+      
+      for (let i = 0; i < dataPoints; i++) {
+        const time = Math.floor(now.getTime() / 1000) - (dataPoints - i) * timeStep
+        
+        // Add some randomness to create realistic looking data
+        if (Math.random() > 0.5) {
+          baseValue += 500
+        }
+        else {
+          baseValue -= 500
+        }
+        
+        
+        if (seriesType === "candlestick") {
+          // For candlestick charts
+          const open = baseValue
+          const high = open + open * (Math.random()/8)
+          const low = open - open * (Math.random()/8)
+          const close = baseValue - baseValue * (Math.random()/8) + baseValue * (Math.random()/8)
+          
+          data.push({
+            time,
+            open,
+            high,
+            low,
+            close
+          })
+        } else {
+          // For other chart types
+          data.push({
+            time,
+            value: baseValue
+          })
+        }
+      }
+      
+      return data
+    }
+    
+    setChartData(generateData())
+  }, [selectedTimeOption, seriesType])
+
+  // Handle series type change
+  const handleSeriesTypeChange = (type: SeriesType) => {
+    setSeriesType(type)
+  }
+
+  // Price statistics
+  const priceStats = [
+    { period: "1시간", change: "-1.31%", color: "text-red-500" },
+    { period: "6시간", change: "-5.85%", color: "text-red-500" },
+    { period: "1일", change: "+1.72%", color: "text-green-500" },
+    { period: "1주일", change: "+24.88%", color: "text-green-500" },
+  ]
+
+  // Amount options for trading
+  const amountOptions = ["1,000", "10,000", "50,000", "100,000"]
+
+  // Marquee news items
   const marqueeItems = [
-    { 
-      category: "급상승 채널", 
+    {
+      category: "급상승 채널",
       channels: [
         { name: "BJ 철구", change: "+8.0% (+4000원)" },
-        { name: "쯔양", change: "+6.2% (+2800원)" }
+        { name: "쯔양", change: "+6.2% (+2800원)" },
       ],
-      direction: "up" 
+      direction: "up",
     },
-    { 
-      category: "급하락 채널", 
+    {
+      category: "급하락 채널",
       channels: [
         { name: "악동김블루", change: "-8.9% (-1000원)" },
-        { name: "침착맨", change: "-5.4% (-700원)" }
+        { name: "침착맨", change: "-5.4% (-700원)" },
       ],
-      direction: "down" 
+      direction: "down",
     },
-    { 
-      category: "인기 카테고리", 
+    {
+      category: "인기 카테고리",
       channels: [{ name: "먹방", change: "" }],
-      direction: "neutral" 
+      direction: "neutral",
     },
-    { 
-      category: "인기 거래 채널", 
+    {
+      category: "인기 거래 채널",
       channels: [
         { name: "짤태수", change: "+6.5% (+2500원)" },
-        { name: "김도", change: "+5.1% (+1800원)" }
+        { name: "김도", change: "+5.1% (+1800원)" },
       ],
-      direction: "up" 
+      direction: "up",
     },
-    { 
-      category: "최고 인기 채널", 
+    {
+      category: "최고 인기 채널",
       channels: [
         { name: "재열이형", change: "+5.2% (+3200원)" },
-        { name: "랄로", change: "+7.8% (+3500원)" }
+        { name: "랄로", change: "+7.8% (+3500원)" },
       ],
-      direction: "up" 
-    }
+      direction: "up",
+    },
   ]
-  
-  useEffect(() => {
-    if (!marqueeRef.current) return;
 
-    const marqueeContent = marqueeRef.current;
-    const marqueeWidth = marqueeContent.scrollWidth / 3;
-    marqueeContent.style.animationDuration = `${marqueeWidth / 60}s`; 
-    
-    return () => {
-      if (marqueeContent) {
-        marqueeContent.style.animationDuration = '';
-      }
-    };
-  }, []);
+  // Chart colors
+  const chartColors = {
+    backgroundColor: "white",
+    lineColor: "#2962FF",
+    textColor: "#333333",
+    areaTopColor: "#2962FF",
+    areaBottomColor: "rgba(41, 98, 255, 0.28)",
+  }
 
   return (
-    <div className="flex min-h-screen bg-[#ffffff] flex-col">
-      <div className="flex-1 pl-[150px] pt-8">
-        <div className="flex items-start mt-2">
-          <div className="mr-4 ml-[-100]">
-            <div className="w-14 h-14 rounded-full border border-gray-200 flex items-center justify-center overflow-hidden">
-              <Image 
-                src="/logo2.svg" 
-                alt="Logo" 
-                width={54} 
-                height={54}
-                className="rounded-full"
+    <div className="flex min-h-screen bg-white flex-col">
+      <div className="flex-1 px-4 md:px-6 lg:px-8 py-4 md:py-6">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
+          {/* Left section - Profile and Chart */}
+          <div className="flex-1">
+            <ChannelHeader 
+              name="침착맨"
+              description="반갑습니다. 오늘도 즐겁게 날입니다."
+              subscriberCount={2000000}
+              changePercentage="+5.5%"
+              changeTime="2시간"
+            />
+            
+            <TimelineControls
+              minuteOptions={minuteOptions}
+              periodOptions={periodOptions}
+              selectedTimeOption={selectedTimeOption}
+              // selectedPeriodOption={selectedPeriodOption}
+              onTimeSelection={handleTimeSelection}
+            />
+
+            <div className="mt-6 rounded-lg">
+              <ChartComponent
+                seriesType={seriesType}
+                data={chartData}
+                colors={chartColors}
+                onSeriesTypeChange={handleSeriesTypeChange}
+                onTimeRangeChange={handleTimeSelection}
+                width="100%"
+                height="400px"
+                chartOptions={{
+                  timeScale: {
+                    timeVisible: true,
+                    secondsVisible: false,
+                  }
+                }}
               />
             </div>
           </div>
-          <div>
-            <h1 className="text-black text-[18px] font-semibold">
-              무스 <span className="text-[14px] font-medium text-gray-500">@무스</span>
-            </h1>
-            <h2 className="text-black text-[22px] mb-4">
-              89,650원 <span className="text-[15px] text-red-500 ml-2">+0.9% (+800원)</span>
-            </h2>
-            <div className="flex items-center ">
-              <div className="relative inline-block -mt-2">
-                <div className="flex gap-4">
-                  <div className="relative inline-block">
-                    <button
-                      type="button"
-                      onClick={() => setTimeDropdownOpen(!timeDropdownOpen)}
-                      className={`text-sm relative px-3 py-1.5 rounded-[8px] cursor-pointer ${
-                        isMinuteActive ? 'text-blue-700 font-medium bg-blue-50' : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
-                      }`}
-                    >
-                      <span className="flex items-center">
-                        <span className="ml-1">{displayedDropdownOption}</span>
-                        <svg
-                          className={`ml-1 h-4 w-4 transition-transform duration-200 ${timeDropdownOpen ? 'rotate-180' : ''}`}
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </span>
-                    </button>
-                    {timeDropdownOpen && (
-                      <div className="absolute mt-2 bg-white shadow-lg rounded-md w-full z-10">
-                        {minuteOptions.map((option) => (
-                          <button
-                            key={option}
-                            onClick={() => handleTimeSelection(option)}
-                            className="block w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100"
-                          >
-                            {option}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="ml-[-6]">
-                    {periodOptions.map((period, index) => (
-                      <button 
-                        key={period}
-                        className={`text-sm px-3 py-1.5 rounded-[8px] ${
-                          index > 0 ? 'ml-2' : ''
-                        } cursor-pointer ${
-                          selectedPeriodOption === period
-                            ? 'text-blue-700 font-medium bg-blue-50' 
-                            : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
-                        }`}
-                        onClick={() => handleTimeSelection(period)}
-                      >
-                        {period}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-4 mt-[-50] ml-[-100]">
-          <div className="bg-white rounded-[13px] w-[1200px] h-[630px] mt-20">
-            {/* <ChartComponent
-              seriesType={chartType}
-              data={candlestickData}
-              onSeriesTypeChange={setChartType}
-              chartOptions={chartOptions}
-            /> */}
+
+          {/* Right section - Stats and Buy/Sell */}
+          <div className="w-full lg:w-72 flex flex-col gap-3">
+            <OrderBook />
+            <PriceStats stats={priceStats} />
+            <TradePanel amountOptions={amountOptions} />
           </div>
         </div>
       </div>
-      
-      <style jsx>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); }
-        }
-        .marquee-content {
-          display: inline-block;
-          white-space: nowrap;
-          animation: marquee linear infinite;
-          animation-fill-mode: forwards;
-        }
-      `}</style>
-      
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-100 py-4 overflow-hidden border-t border-gray-100">
-        <div className="marquee-container overflow-hidden">
-          <div 
-            ref={marqueeRef}
-            className="marquee-content"
-          >
-            {[...Array(3)].map((_, i) => (
-              <span key={i} className="inline-block">
-                {marqueeItems.map((item, index) => (
-                  <span 
-                    key={`${i}-${index}`} 
-                    className="mx-16 text-base"
-                  >
-                    <span className={`font-medium ${
-                      item.category === "급상승 채널" || item.category === "급하락 채널" 
-                        ? (item.direction === "down" ? 'text-blue-500' : 'text-red-500') 
-                        : 'text-gray-900'
-                    }`}>
-                      {item.category}:
-                    </span>
-                    {item.channels.map((channel, channelIndex) => (
-                      <span key={channelIndex} className="ml-2 font-light">
-                        <span className="text-black">{channel.name}</span>
-                        {channel.change && (
-                          <span className={`ml-1 ${item.direction === "down" ? 'text-blue-500' : 'text-red-500'}`}>
-                            {channel.change}
-                          </span>
-                        )}
-                        {channelIndex < item.channels.length - 1 ? ',' : ''}
-                      </span>
-                    ))}
-                  </span>
-                ))}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+
+      <MarqueeNews items={marqueeItems} />
     </div>
   )
 }
+

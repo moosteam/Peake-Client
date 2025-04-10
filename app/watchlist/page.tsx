@@ -1,5 +1,5 @@
 'use client';
-import Stock from '../Stock/Stock'; 
+import Stock from './Stock'; 
 
 export default function Home() {
   return (

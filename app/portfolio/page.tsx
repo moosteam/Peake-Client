@@ -1,5 +1,5 @@
 'use client';
-import InvestmentDashboard from "../components/investment-dashboard";
+import InvestmentDashboard from "./investment-dashboard";
 
 export default function RankingPage() {
   return (

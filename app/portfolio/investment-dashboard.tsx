@@ -1,8 +1,8 @@
 "use client"
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
-import { formatNumber } from "../lib/utils"
-import SectionHeader from "./common/SectionHeader"
+import { formatNumber } from "../../lib/utils"
+import SectionHeader from "@components/common/sectionheader/SectionHeader"
 
 // 포트폴리오 데이터 타입 정의
 interface PortfolioItem {
@@ -34,7 +34,7 @@ const InvestmentDashboard = () => {
   }
 
   return (
-    <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto">
+    <>
       <SectionHeader 
         title="투자 내역" 
         subtitle="현재 내가 투자한 유튜버 목록이에요" 
@@ -122,7 +122,7 @@ const InvestmentDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
