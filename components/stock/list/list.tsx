@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-const tableHeaderStyle = "px-3 py-2 text-sm font-medium";
-const tableCellStyle = "px-3 py-2 text-sm text-gray-900";
+// Responsive styles with screen size breakpoints
+// Adjusted responsive styles with tighter spacing
+const tableHeaderStyle = "py-1 text-xs pl-2 sm:py-2 sm:text-sm font-medium";
+const tableCellStyle = "py-1 text-xs pl-2 sm:py-2 sm:text-sm text-gray-900";
 
 export type Subscriber = {
   name: string;
@@ -67,76 +69,97 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse table-fixed rounded-lg overflow-hidden">
+    <div className="overflow-x-auto max-w-full">
+      <table className="w-full border-collapse rounded-lg overflow-hidden min-w-[640px]">
         <thead>
           <tr className="border-b">
-            <th className={`${tableHeaderStyle} text-left w-1/7 rounded-tl-lg text-gray-500`}>
-              <div className="relative left-[-6px]">유튜버</div>
+            <th className={`${tableHeaderStyle} rounded-tl-lg text-gray-500`} style={{ width: 'auto' }}>
+              <div className="flex items-center">
+                <span className="text-xs sm:text-sm whitespace-nowrap">유튜버</span>
+              </div>
             </th>
             <th
-              className={`${tableHeaderStyle} text-right w-1/9 cursor-pointer ${
+              className={`${tableHeaderStyle} cursor-pointer ${
                 sortField === 'subscribers' ? 'text-blue-500' : 'text-gray-500'
               }`}
               onClick={handleSortSubscribers}
+              style={{ width: 'auto' }}
             >
-              구독자
-              <button className="ml-1 relative top-[3px]">
-                {sortField === 'subscribers' ? (
-                  <svg
-                    className={`h-4 w-4 text-blue-500 ${sortOrderSubscribers === 'asc' ? 'transform rotate-180' : ''}`}
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 10l5 5 5-5H7z" />
-                  </svg>
-                ) : (
-                  <Image
-                    src="/up-down.svg"
-                    alt="Sort"
-                    width={16}
-                    height={16}
-                    className="text-gray-500"
-                  />
-                )}
-              </button>
+              <div className="flex items-center justify-end">
+                <span className="text-xs sm:text-sm whitespace-nowrap">구독자</span>
+                <button className="ml-1 relative top-[1px]">
+                  {sortField === 'subscribers' ? (
+                    <svg
+                      className={`h-3 w-3 sm:h-4 sm:w-4 text-blue-500 ${sortOrderSubscribers === 'asc' ? 'transform rotate-180' : ''}`}
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M7 10l5 5 5-5H7z" />
+                    </svg>
+                  ) : (
+                    <Image
+                      src="/up-down.svg"
+                      alt="Sort"
+                      width={16}
+                      height={16}
+                      className="text-gray-500 h-3 w-3 sm:h-4 sm:w-4"
+                    />
+                  )}
+                </button>
+              </div>
             </th>
-            <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500 pl-6`}>
-              현재가
+            
+            <th className={`${tableHeaderStyle} text-gray-500`} style={{ width: 'auto' }}>
+              <div className="flex justify-end">
+                <span className="text-xs sm:text-sm whitespace-nowrap">현재가</span>
+              </div>
             </th>
-            <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500`}>등락률</th>
-            <th className={`${tableHeaderStyle} text-right w-1/9 text-gray-500`}>카테고리</th>
+            <th className={`${tableHeaderStyle} text-gray-500`} style={{ width: 'auto' }}>
+              <div className="flex justify-end">
+                <span className="text-xs sm:text-sm whitespace-nowrap">등락률</span>
+              </div>
+            </th>
+            <th className={`${tableHeaderStyle} text-gray-500 hidden sm:table-cell`} style={{ width: 'auto' }}>
+              <div className="flex justify-end">
+                <span className="text-xs sm:text-sm whitespace-nowrap">카테고리</span>
+              </div>
+            </th>
             <th
-              className={`${tableHeaderStyle} text-right w-1/9 cursor-pointer ${
+              className={`${tableHeaderStyle} cursor-pointer ${
                 sortField === 'volume' ? 'text-blue-500' : 'text-gray-500'
               }`}
               onClick={handleSortVolume}
+              style={{ width: 'auto' }}
             >
-              거래량
-              <button className="ml-1 relative top-[3px]">
-                {sortField === 'volume' ? (
-                  <svg
-                    className={`h-4 w-4 text-blue-500 ${sortOrderVolume === 'asc' ? 'transform rotate-180' : ''}`}
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 10l5 5 5-5H7z" />
-                  </svg>
-                ) : (
-                  <Image
-                    src="/up-down.svg"
-                    alt="Sort"
-                    width={16}
-                    height={16}
-                    className="text-gray-500"
-                  />
-                )}
-              </button>
+              <div className="flex items-center justify-end">
+                <span className="text-xs sm:text-sm whitespace-nowrap">거래량</span>
+                <button className="ml-1 relative top-[1px]">
+                  {sortField === 'volume' ? (
+                    <svg
+                      className={`h-3 w-3 sm:h-4 sm:w-4 text-blue-500 ${sortOrderVolume === 'asc' ? 'transform rotate-180' : ''}`}
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M7 10l5 5 5-5H7z" />
+                    </svg>
+                  ) : (
+                    <Image
+                      src="/up-down.svg"
+                      alt="Sort"
+                      width={16}
+                      height={16}
+                      className="text-gray-500 h-3 w-3 sm:h-4 sm:w-4"
+                    />
+                  )}
+                </button>
+              </div>
             </th>
-            <th className={`${tableHeaderStyle} text-right w-1/9 rounded-tr-lg text-gray-500`}>
-              <div className="relative -left-10">안전율</div>
+            <th className={`${tableHeaderStyle} rounded-tr-lg text-gray-500 hidden sm:table-cell`} style={{ width: 'auto' }}>
+            <div className="flex justify-end pr-2">
+            <span className="text-xs sm:text-sm whitespace-nowrap">안전율</span>
+            </div>
             </th>
           </tr>
         </thead>
@@ -148,13 +171,19 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
               onClick={() => window.location.href = '/info'}
             >
               <td className={`${tableCellStyle} rounded-lg ${index === 0 ? 'rounded-tl-lg' : ''} ${index === displayedSubscribers.length - 1 ? 'rounded-bl-lg' : ''}`}>
-                <div className="flex items-center">
-                  <button onClick={() => toggleFavorite(index)} className="cursor-pointer">
+                <div className="flex items-center space-x-1 sm:space-x-2">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(index);
+                    }} 
+                    className="cursor-pointer flex-shrink-0"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill={subscriber.liked ? "#ef4444" : "#d1d5db"}
-                      className="w-4 h-4"
+                      className="w-3 h-3 sm:w-4 sm:h-4"
                     >
                       <path
                         fillRule="evenodd"
@@ -163,26 +192,30 @@ export default function List({ subscribers, displayedSubscribers, setSubscribers
                       />
                     </svg>
                   </button>
-                  <span className="inline-block w-5 text-center mr-4 text-blue-700 text-sm ml-4">
+                  <span className="inline-block w-3 sm:w-5 text-center text-blue-700 text-xs sm:text-sm flex-shrink-0">
                     {index + 1}
                   </span>
-                  <img src="/image.jpg" alt="kr" className="w-7 h-7 mr-3 rounded-full" />
-                  <span className="text-sm">{subscriber.name}</span>
+                  <img src="/image.jpg" alt="kr" className="w-4 h-4 sm:w-7 sm:h-7 rounded-full flex-shrink-0" />
+                  <span className="text-xs sm:text-sm truncate max-w-[60px] sm:max-w-full whitespace-nowrap">{subscriber.name}</span>
                 </div>
               </td>
-              <td className={`${tableCellStyle} text-right ${index === displayedSubscribers.length - 1 ? 'rounded-br-lg' : ''}`}>{subscriber.count}만명</td>
-              <td className={`${tableCellStyle} text-right pl-6`}>{subscriber.price.toLocaleString()}원</td>
-              <td className="px-3 py-2 text-sm text-right">
+              <td className={`${tableCellStyle} text-right whitespace-nowrap ${index === displayedSubscribers.length - 1 ? 'rounded-br-lg' : ''}`}>
+                <span className="text-xs sm:text-sm">{subscriber.count}만명</span>
+              </td>
+              <td className={`${tableCellStyle} text-right pl-0 sm:pl-2 whitespace-nowrap`}>
+                <span className="text-xs sm:text-sm">{subscriber.price.toLocaleString()}원</span>
+              </td>
+              <td className={`${tableCellStyle} text-right pl-0 sm:pl-2 whitespace-nowrap`}>
                 <div className={subscriber.rate.includes('-') ? "text-red-500" : "text-blue-500"}>
                   {subscriber.rate}
                 </div>
               </td>
-              <td className={`${tableCellStyle} text-right`}>{subscriber.category}</td>
-              <td className={`${tableCellStyle} text-right`}>{subscriber.volume}</td>
-              <td className={`${tableCellStyle} text-right rounded-tr-lg rounded-br-lg`}>
-                <div className="relative -left-10">
-                  <span className="text-blue-500">0.5%</span>
-                </div>
+              <td className={`${tableCellStyle} text-right hidden sm:table-cell whitespace-nowrap`}>{subscriber.category}</td>
+              <td className={`${tableCellStyle} text-right whitespace-nowrap`}>{subscriber.volume}</td>
+              <td className={`${tableCellStyle} text-right rounded-tr-lg rounded-br-lg hidden sm:table-cell whitespace-nowrap`}>
+              <div className="flex justify-end pr-2">
+              <span className="text-blue-500">0.5%</span>
+              </div>
               </td>
             </tr>
           ))}

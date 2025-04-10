@@ -30,17 +30,16 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
-        <div className="flex min-h-screen bg-[#FFFFFF]">
-          <Sidebar />
-          <div className="flex-1 pl-[250px] pt-8">
-            <div className="bg-white rounded-lg w-[95%] max-w-[1600px] min-h-[94vh] mx-auto p-6 mt-[-8px]">
-              <div className="w-full px-6 sm:px-8 lg:px-10 max-w-[1600px] mx-auto">
-                {children}
-              </div>
-            </div>
+        <div className="flex min-h-screen bg-white">
+          <div className="w-[250px] shrink-0">
+            <Sidebar />
           </div>
+          <div className="flex-1"> {/* Space for right sidebar */}
+            {children}
+          </div>
+          {/* The RightSidebar is now included in individual pages */}
         </div>
       </body>
     </html>
