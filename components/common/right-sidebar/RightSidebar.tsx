@@ -20,21 +20,23 @@ const RightSidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <div className="h-full flex flex-col bg-white">
-      {/* Horizontal layout for children and tab buttons */}
-      <div className="flex flex-row justify-between px-4">
-        {children}
-        <div className="flex flex-col items-center py-6 space-y-6">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
+      {/* Horizontal layout for children and tab buttons with nowrap */}
+      <div className="flex flex-row justify-between px-4 w-full flex-nowrap">
+        <div className="flex-grow overflow-hidden">
+          {children}
+        </div>
+        <div className="flex flex-col items-center py-6 space-y-6 flex-shrink-0">
           {tabs.map(tab => (
             <button
               key={tab.id}
-              className={`flex flex-col items-center text-xs transition-opacity ${
+              className={`flex flex-col items-center text-xs transition-opacity whitespace-nowrap ${
                 activeTab === tab.id ? 'opacity-100' : 'opacity-50 hover:opacity-80'
               }`}
               onClick={() => onTabChange(tab.id)}
             >
               {/* SVG icons with black color */}
-              <div className="h-6 w-6 mb-1 text-black">
+              <div className="h-6 w-6 mb-1 text-black flex-shrink-0">
                 {tab.id === 'myStocks' && (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -57,7 +59,7 @@ const RightSidebar: React.FC<SidebarProps> = ({
                   </svg>
                 )}
               </div>
-              <span className='text-[0.6rem] text-black'>{tab.name}</span>
+              <span className='text-[0.6rem] text-black whitespace-nowrap'>{tab.name}</span>
             </button>
           ))}
         </div>
