@@ -65,8 +65,7 @@ export default function Stock() {
           />
         </div>
       </div>
-      {/* 사이드바 영역 */}
-      <SidebarWrapper />
+      <SidebarWrapper/>
     </div>
   );
 }
